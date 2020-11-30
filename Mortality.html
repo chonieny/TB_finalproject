@@ -11,7 +11,7 @@
 
 
 
-<title>Graphs for Total Received Fundcing and Estimated Number of Deaths from TB 2017~2019</title>
+<title>Graphs for Total Received Funding and Estimated Number of Deaths from TB 2017~2019</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -379,12 +379,67 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Graphs for Total Received Fundcing and Estimated Number of Deaths from TB 2017~2019</h1>
+<h1 class="title toc-ignore">Graphs for Total Received Funding and Estimated Number of Deaths from TB 2017~2019</h1>
 
 </div>
 
 
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages --------------------- tidyverse 1.3.0 --</code></pre>
+<pre><code>## v ggplot2 3.3.2     v purrr   0.3.4
+## v tibble  3.0.3     v dplyr   1.0.2
+## v tidyr   1.1.2     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.5.0</code></pre>
+<pre><code>## -- Conflicts ------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(dplyr)
+library(ggplot2)
+library(reshape2)</code></pre>
+<pre><code>## Warning: package &#39;reshape2&#39; was built under R version 4.0.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;reshape2&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     smiths</code></pre>
+<pre class="r"><code>knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = &quot;90%&quot;
+)
+theme_set(theme_minimal() + theme(legend.position = &quot;bottom&quot;))
+options(
+  ggplot2.continuous.colour = &quot;viridis&quot;,
+  ggplot2.continuous.fill = &quot;viridis&quot;
+)
+scale_colour_discrete = scale_color_viridis_d
+scale_fill_discrete = scale_fill_viridis_d</code></pre>
+<pre class="tidy"><code>TB_funding = read.csv(&quot;./data/TB_expenditure_utilisation.csv&quot;)
 
+TB_tot_funding =
+  TB_funding %&gt;%
+  filter(country %in% c(&quot;Bangladesh&quot;, &quot;Cambodia&quot;, &quot;India&quot;, &quot;Indonesia&quot;, &quot;Lao People&#39;s Democratic Republic&quot;,
+                        &quot;Mongolia&quot;, &quot;Myanmar&quot;, &quot;Nepal&quot;, &quot;Solomon Islands&quot;, &quot;Thailand&quot;, &quot;Timor-Leste&quot;)) %&gt;%
+  select(country, year, rcvd_tot_sources) %&gt;%
+  rename(funding = rcvd_tot_sources) %&gt;%
+  mutate(
+    year = as.factor(year), 
+    funding = as.numeric(funding))</code></pre>
+<p><code>{Graph: Total funding received in each country in 2017-2019} ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +   geom_line(aes(color = country)) +   geom_point(aes(color = country)) +   labs(x = "Year", title = "Total funding received in each country in 2017~2019") +   scale_y_continuous(name ="Funding ($)", labels = scales::comma)</code></p>
+<pre class="tidy"><code>TB_burden = read.csv(&quot;./data/TB_burden_countries.csv&quot;)
+
+TB_mort =
+  TB_burden %&gt;%
+  filter(country %in% c(&quot;Bangladesh&quot;, &quot;Cambodia&quot;, &quot;India&quot;, &quot;Indonesia&quot;, &quot;Lao People&#39;s Democratic Republic&quot;,
+                        &quot;Mongolia&quot;, &quot;Myanmar&quot;, &quot;Nepal&quot;, &quot;Solomon Islands&quot;, &quot;Thailand&quot;, &quot;Timor-Leste&quot;)) %&gt;%
+  filter(year %in% c(&quot;2017&quot;, &quot;2018&quot;, &quot;2019&quot;)) %&gt;%
+  select(country, year, e_pop_num, e_mort_num) %&gt;%
+  mutate(e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num)) %&gt;%
+  select(-e_pop_num, -e_mort_num) %&gt;%
+  mutate(
+    year = as.factor(year), 
+    e_mort_pro = as.numeric(e_mort_pro))</code></pre>
+<p><code>{Graph: Estimated proportions of death from TB in each country in 2017~2019} ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +   geom_line(aes(color = country)) +   geom_point(aes(color = country)) +   labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2017~2019") +   scale_y_continuous(name ="Proportion of deaths from TB")</code></p>
 
 
 
