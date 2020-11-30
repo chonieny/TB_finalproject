@@ -1,0 +1,25 @@
+---
+title: "Website Title"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cerulean
+---
+
+## Where image will be
+
+
+## Project Motivation
+
+
+## Data used
+
+
+## Website Overview
+
+
+## Findings
+
+
+## Contributors 
