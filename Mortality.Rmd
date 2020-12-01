@@ -41,7 +41,8 @@ TB_tot_funding =
 ```
 
 ```{Graph: Total funding received in each country in 2017-2019}
-ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +
+funding_graph= 
+  ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +
   geom_line(aes(color = country)) +
   geom_point(aes(color = country)) +
   labs(x = "Year", title = "Total funding received in each country in 2017~2019") +
@@ -65,7 +66,8 @@ TB_mort =
 ```
 
 ```{Graph: Estimated proportions of death from TB in each country in 2017~2019}
-ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
+mortality_graph=
+  ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
   geom_line(aes(color = country)) +
   geom_point(aes(color = country)) +
   labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2017~2019") +

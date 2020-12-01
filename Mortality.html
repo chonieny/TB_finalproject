@@ -359,6 +359,9 @@ div.tocify {
   <a href="Mortality.html">Mortality</a>
 </li>
 <li>
+  <a href="Regression.html">Regression Analysis</a>
+</li>
+<li>
   <a href="mailto:&lt;you@youremail.com&gt;">
     <span class="fa fa-envelope fa-lg"></span>
      
@@ -385,12 +388,12 @@ div.tocify {
 
 
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## -- Attaching packages --------------------- tidyverse 1.3.0 --</code></pre>
+<pre><code>## -- Attaching packages --------------------------------------------------------------------------------- tidyverse 1.3.0 --</code></pre>
 <pre><code>## v ggplot2 3.3.2     v purrr   0.3.4
 ## v tibble  3.0.3     v dplyr   1.0.2
 ## v tidyr   1.1.2     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.5.0</code></pre>
-<pre><code>## -- Conflicts ------------------------ tidyverse_conflicts() --
+<pre><code>## -- Conflicts ------------------------------------------------------------------------------------ tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>library(dplyr)
@@ -425,7 +428,7 @@ TB_tot_funding =
   mutate(
     year = as.factor(year), 
     funding = as.numeric(funding))</code></pre>
-<p><code>{Graph: Total funding received in each country in 2017-2019} ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +   geom_line(aes(color = country)) +   geom_point(aes(color = country)) +   labs(x = "Year", title = "Total funding received in each country in 2017~2019") +   scale_y_continuous(name ="Funding ($)", labels = scales::comma)</code></p>
+<p><code>{Graph: Total funding received in each country in 2017-2019} funding_graph=    ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +   geom_line(aes(color = country)) +   geom_point(aes(color = country)) +   labs(x = "Year", title = "Total funding received in each country in 2017~2019") +   scale_y_continuous(name ="Funding ($)", labels = scales::comma)</code></p>
 <pre class="tidy"><code>TB_burden = read.csv(&quot;./data/TB_burden_countries.csv&quot;)
 
 TB_mort =
@@ -439,7 +442,7 @@ TB_mort =
   mutate(
     year = as.factor(year), 
     e_mort_pro = as.numeric(e_mort_pro))</code></pre>
-<p><code>{Graph: Estimated proportions of death from TB in each country in 2017~2019} ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +   geom_line(aes(color = country)) +   geom_point(aes(color = country)) +   labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2017~2019") +   scale_y_continuous(name ="Proportion of deaths from TB")</code></p>
+<p><code>{Graph: Estimated proportions of death from TB in each country in 2017~2019} mortality_graph=   ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +   geom_line(aes(color = country)) +   geom_point(aes(color = country)) +   labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2017~2019") +   scale_y_continuous(name ="Proportion of deaths from TB")</code></p>
 
 
 
