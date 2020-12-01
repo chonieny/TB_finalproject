@@ -1,0 +1,152 @@
+---
+title: "Regression Analysis"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cerulean
+---
+```{library, include = FALSE}
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+scale_colour_discrete = scale_color_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+```{Regression Analysis JUYOUNG}
+TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
+```
+
+```{tidy data}
+table(TB_usage$g_whoregion) #We will use WPR(Western Pacific) , SEA(South East Asia)
+TB_usage = TB_usage %>%
+  select(
+    country, year, g_whoregion,
+    rcvd_fld,rcvd_lab, rcvd_mdrmgt, rcvd_orsrvy, rcvd_oth, rcvd_patsup, 
+    rcvd_prog, rcvd_sld, rcvd_staff, rcvd_tbhiv, rcvd_tpt
+  ) %>%
+  filter(
+    g_whoregion == "WPR" | g_whoregion == "SEA"
+  ) %>%
+  select(-g_whoregion)
+
+colSums(is.na(TB_usage)) #remove rcvd_tpt because there are many NAs.
+
+TB_usage = TB_usage %>% 
+  select(-rcvd_tpt) 
+
+colSums(is.na(TB_usage))
+
+TB_usage = TB_usage %>%
+  na.omit(rcvd_fld)
+
+TB_usage = TB_usage[TB_usage$country %in% names(which(table(TB_usage$country) > 2)), ] 
+#remove the data that doesn't have 2017,2018,2019
+```
+
+```{Variable:Types of Usage funding in each country in 2017-2019}
+unique(TB_usage$country)
+colSums(TB_usage == 0)
+
+TB_usage %>%
+  select(-country, -year) %>%
+  colMeans() %>%
+  order() 
+#top 5 usage type of fundings are: rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth
+
+usage_2017_top5 = TB_usage %>% 
+  filter(year == "2017") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+
+usage_2018_top5 = TB_usage %>% 
+  filter(year == "2018") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+
+usage_2019_top5 = TB_usage %>% 
+  filter(year == "2019") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+```
+
+```{Graph:Types of Usage funding in each country in 2017-2019}
+ggplot(data = usage_2017_top5, aes(x = country, y = value, group=usage_type)) +
+  geom_line(aes(color = usage_type))+
+  geom_point(aes(color = usage_type)) +
+  labs(x = "Countries", title = "Types of Usage funding in each country in 2017") +
+  scale_y_continuous(name="US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
+
+
+ggplot(data = usage_2018_top5, aes(x = country, y = value, group=usage_type)) +
+  geom_line(aes(color = usage_type))+
+  geom_point(aes(color = usage_type)) +
+  labs(x = "Countries", title = "Types of Usage funding in each country in 2018") +
+  scale_y_continuous(name="US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
+
+
+ggplot(data = usage_2019_top5, aes(x = country, y = value, group=usage_type)) +
+  geom_line(aes(color = usage_type)) +
+  geom_point(aes(color = usage_type)) +
+  labs(x = "Countries", title = "Types of Usage funding in each country in 2019") +
+  scale_y_continuous(name="US Dollars($)", labels = scales::comma) + 
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
+
+
+unique(TB_usage$country)
+```
+
+To do regression analysis, we calculate the proportion of the estimated mortality of TB cases per 100k. To do that, we divide the estimated number of deaths from TB(`e_mort_num`) by estimated total population number(`e_pop_num`) and multiply by 100,000.
+
+Below is the density graph of proportion of the estimated mortality of TB per 100k.
+```{regression anlaysis }
+TB_burden = read_csv("./data/TB_burden_countries.csv")
+
+TB_burden = TB_burden %>%
+  mutate(
+    e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num),
+    e_mort_pro_100k = as.numeric(e_mort_num)/as.numeric(e_pop_num) * 100000
+  )
+
+TB_burden %>%
+  ggplot(aes(x = e_mort_pro_100k)) + 
+  geom_density(fill = "lightblue") +
+  labs(x = "Estimated mortality of TB cases per 100K", title = "Histogram of Estimated mortality of TB cases Per 100K")
+```
+Since the graph is right-skewed, we need to make some changes to make this to satisfy the assumptions of the linear model.
+
+Basic features we are interested in are: year, rcvd_patsup,  rcvd_staff,  rcvd_mdrmgt, rcvd_fld, rcvd_oth.
+```{r}
+df1 = TB_burden %>% 
+  select(year, e_inc_num, e_pop_num, e_mort_pro_100k, e_mort_pro )
+df2 = TB_usage %>%
+  select(year, exp_tot, rcvd_patsup,  rcvd_staff,  rcvd_mdrmgt, rcvd_fld, rcvd_oth )
+  
+TB_regression = merge(df1, df2, by=c("year")) %>%
+  na.omit()
+
+TB_burden %>%
+  ggplot(aes(x = e_mort_pro_100k)) + 
+  geom_density(fill = "lightblue") +
+  labs(x = "Estimated mortality of TB cases per 100K", title = "Histogram of Estimated mortality of TB cases Per 100K") +
+  scale_x_log10()
+
+
+lm_model = lm(e_mort_pro ~ year + e_inc_num + e_pop_num + exp_tot, data = TB_regression)
+summary(lm_model)
+```
+

@@ -7,6 +7,8 @@ navbar:
       href: Report.html
     - text: "Mortality"
       href: Mortality.html
+    - text: "Regression Analysis"
+      href: Regression.html
     - icon: fa-envelope fa-lg
       href: mailto:<you@youremail.com>
     - icon: fa-github fa-lg
