@@ -11,6 +11,7 @@ library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(reshape2)
+library(ggalt)   
 knitr::opts_chunk$set(
   fig.width = 6,
   fig.asp = .6,
@@ -33,8 +34,8 @@ TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
 table(TB_usage$g_whoregion) #We will use WPR(Western Pacific) , SEA(South East Asia)
 TB_usage = TB_usage %>%
   select(
-    country, year, g_whoregion,
-    rcvd_fld,rcvd_lab, rcvd_mdrmgt, rcvd_orsrvy, rcvd_oth, rcvd_patsup, 
+    country, year, g_whoregion,hospd_mdr_dur,
+    rcvd_fld, rcvd_lab, rcvd_mdrmgt, rcvd_orsrvy, rcvd_oth, rcvd_patsup, 
     rcvd_prog, rcvd_sld, rcvd_staff, rcvd_tbhiv, rcvd_tpt
   ) %>%
   filter(
@@ -106,8 +107,6 @@ There are other types of usage funding, but we selected top 5 by taking the mean
 
 
 # Type of Usage Funding in Each Country
-
-
 ## 2017
 #######WRITE FINDINGS#######
 ```{r echo=FALSE}
@@ -141,9 +140,47 @@ ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
-# Proportion of Estimated Proportion of Death from TB
-```{r}
+# Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
+```{r include=FALSE}
+TB_duration_2017 = TB_usage %>%
+  filter(year == "2017") %>%
+  mutate(hospd_2017 = hospd_mdr_dur) %>%
+  select(country, hospd_2017)
 
+TB_duration_2018 = TB_usage %>%
+  filter(year == "2018") %>%
+  mutate(hospd_2018 = hospd_mdr_dur) %>%
+  select(country, hospd_2018)
+
+TB_duration_2019 = TB_usage %>%
+  filter(year == "2019") %>%
+  mutate(hospd_2019 = hospd_mdr_dur) %>%
+  select(country, hospd_2019)
+
+TB_duration = full_join(inner_join(TB_duration_2017, TB_duration_2018), TB_duration_2019)
+```
+
+```{r echo=FALSE}
+TB_duration = full_join(inner_join(TB_duration_2017, TB_duration_2018), TB_duration_2019)
+
+ggplot() +
+  geom_segment(data=TB_duration, aes(y = country, yend = country, x = 0, xend = .5), 
+               color = "#b2b2b2", size = 0.15) + 
+  geom_dumbbell(data = TB_duration, aes(y=country, x = hospd_2017, xend = hospd_2019),
+                size = 1.5, color = "#b2b2b2", size_x = 3, size_xend = 3, colour_x = "red",
+                colour_xend = "blue") +
+  labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
+       title = "Estimated average duration of stay if patients starting MDR-TB/XDR-TB
+       treatment are hospitalized (days)") +
+  theme(axis.text.y = element_text(angle = 45, vjust = 0.5, hjust = 1))
+
+
+ggplot(data = TB_usage, aes(x = country, y = hospd_mdr_dur, fill = year)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
+       title = "Estimated average duration of stay if patients starting MDR-TB/XDR-TB
+       treatment are hospitalized (days)") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1)) 
 ```
 
 # Transformation and Assumption of the Normality 
@@ -158,10 +195,17 @@ TB_burden = TB_burden %>%
     e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num),
     e_mort_pro_100k = as.numeric(e_mort_num)/as.numeric(e_pop_num) * 100000
   )
+
+TB_burden %>%
+  filter(year == 2017 |year == 2018 | year == 2019) %>%
+  filter(country == "Bangladesh" | country == "Cambodia" |country == "India"| country ==  "Indonesia" | country == "Lao People's Democratic Republic"|country ==  "Mongolia"| country == "Myanmar" | country == "Nepal"|country == "Solomon Islands"|country == "Thailand"|country == "Timor-Leste" ) 
+
 ```
 
 ```{r GGPLOT, message=FALSE, warning=FALSE, echo=FALSE}
 TB_burden %>%
+  filter(year == 2017 |year == 2018 | year == 2019) %>%
+  filter(country == "Bangladesh" | country == "Cambodia" |country == "India"| country ==  "Indonesia" | country == "Lao People's Democratic Republic"|country ==  "Mongolia"| country == "Myanmar" | country == "Nepal"|country == "Solomon Islands"|country == "Thailand"|country == "Timor-Leste" ) %>%
   ggplot(aes(x = e_mort_pro_100k)) + 
   geom_histogram(aes(y = ..density..), colour = "black", fill = "white") +
   geom_density(alpha = 0.3, fill = "red") +
@@ -171,6 +215,8 @@ TB_burden %>%
 We used log transformation to make the graph normal. Below is the graph after the transformation, and we can say that it is more bell-shaped than the previous graph.
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 TB_burden %>%
+  filter(year == 2017 |year == 2018 | year == 2019) %>%
+  filter(country == "Bangladesh" | country == "Cambodia" |country == "India"| country ==  "Indonesia" | country == "Lao People's Democratic Republic"|country ==  "Mongolia"| country == "Myanmar" | country == "Nepal"|country == "Solomon Islands"|country == "Thailand"|country == "Timor-Leste" ) %>%
   ggplot(aes(x = e_mort_pro_100k)) + 
   geom_histogram(aes(y = ..density..), colour = "black", fill = "white") +
   geom_density(alpha = 0.3, fill = "red") +
@@ -179,20 +225,31 @@ TB_burden %>%
 ```
 
 # Results
-With the regression analysis, we can predict the estimated mortality of TB cases. We will use the variables ################### 
-We have included the interaction between ##################### because #################3
+With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. 
+We have included the interaction between **rcvd_patsup** and **rcvd_staff** because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.
 
 ```{r}
 df1 = TB_burden %>% 
   select(year, e_inc_num, e_pop_num, e_mort_pro_100k, e_mort_pro )
 
 df2 = TB_usage %>%
-  select(year, rcvd_patsup,  rcvd_staff,  rcvd_mdrmgt, rcvd_fld, rcvd_oth )
+  select(year, hospd_mdr_dur, rcvd_patsup,  rcvd_staff,  rcvd_mdrmgt, rcvd_fld, rcvd_oth, rcvd_patsup, rcvd_prog, rcvd_sld, rcvd_staff, rcvd_tbhiv )
   
 TB_regression = merge(df1, df2, by=c("year")) %>%
   na.omit()
 
-lm_model = lm(e_mort_pro ~ year + e_inc_num + e_pop_num, data = TB_regression)
+lm_model = lm(hospd_mdr_dur ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + rcvd_oth + rcvd_patsup*rcvd_staff, data = TB_regression)
+```
+
+Based on transformation above, the model we are going to fit is:
+$$log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other + \beta_7 patient*staff$$
+
+```{r}
 summary(lm_model)
 ```
 
+Based on the summary, we can see that some of our main effects and the interaction term are statistically significant. 
+
+The F-statistics is 2221.3144029. It’s obvious that the model is statistically significant under any reasonable critical value. It also has a R2
+ value of 0.5108901, which indicated chosen variables together are able to explain 51.09%
+ of observed variation.
