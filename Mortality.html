@@ -430,8 +430,13 @@ TB_tot_funding =
   rename(funding = rcvd_tot_sources) %&gt;%
   mutate(
     year = as.factor(year), 
-    funding = as.numeric(funding))</code></pre>
-<p><code>{Graph: Total funding received in each country in 2017-2019} funding_graph=    ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +   geom_line(aes(color = country)) +   geom_point(aes(color = country)) +   labs(x = "Year", title = "Total funding received in each country in 2017~2019") +   scale_y_continuous(name ="Funding ($)", labels = scales::comma)</code></p>
+    funding = as.numeric(funding))
+
+ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +
+  geom_line(aes(color = country)) +
+  geom_point(aes(color = country)) +
+  labs(x = &quot;Year&quot;, title = &quot;Total funding received in each country in 2017~2019&quot;) +
+  scale_y_continuous(name =&quot;Funding ($)&quot;, labels = scales::comma)</code></pre>
 <pre class="tidy"><code>TB_burden = read.csv(&quot;./data/TB_burden_countries.csv&quot;)
 
 TB_mort =
@@ -444,56 +449,13 @@ TB_mort =
   select(-e_pop_num, -e_mort_num) %&gt;%
   mutate(
     year = as.factor(year), 
-    e_mort_pro = as.numeric(e_mort_pro))</code></pre>
-<p><code>{Graph: Estimated proportions of death from TB in each country in 2017~2019}   ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +   geom_line(aes(color = country)) +   geom_point(aes(color = country)) +   labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2017~2019") +   scale_y_continuous(name ="Proportion of deaths from TB")</code></p>
-<pre class="r"><code>library(gganimate)</code></pre>
-<pre><code>## Warning: package &#39;gganimate&#39; was built under R version 4.0.3</code></pre>
-<pre class="r"><code>TB_burden = read.csv(&quot;./data/TB_burden_countries.csv&quot;)
-
-TB_mort =
-  TB_burden %&gt;%
-  filter(country %in% c(&quot;Bangladesh&quot;, &quot;Cambodia&quot;, &quot;India&quot;, &quot;Indonesia&quot;, &quot;Lao People&#39;s Democratic Republic&quot;,
-                        &quot;Mongolia&quot;, &quot;Myanmar&quot;, &quot;Nepal&quot;, &quot;Solomon Islands&quot;, &quot;Thailand&quot;, &quot;Timor-Leste&quot;)) %&gt;%
-  select(country, year, e_pop_num, e_mort_num) %&gt;%
-  mutate(e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num)) %&gt;%
-  select(-e_pop_num, -e_mort_num) %&gt;%
-  mutate(
-    year = as.numeric(year), 
     e_mort_pro = as.numeric(e_mort_pro))
 
-p &lt;- ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
+ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
   geom_line(aes(color = country)) +
   geom_point(aes(color = country)) +
   labs(x = &quot;Year&quot;, title = &quot;Estimated proportions of death from TB in each country in 2017~2019&quot;) +
-  scale_y_continuous(name = &quot;Proportion of deaths from TB&quot;) +
-  theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
-
-p + transition_reveal(year)</code></pre>
-<p><img src="Mortality_files/figure-html/unnamed-chunk-2-1.gif" width="90%" /></p>
-<pre class="r"><code>TB_outcomes = read.csv(&quot;./data/TB_outcomes.csv&quot;)
-
-TB_success = 
-  TB_outcomes %&gt;%
-  filter(country %in% c(&quot;Bangladesh&quot;, &quot;Cambodia&quot;, &quot;India&quot;, &quot;Indonesia&quot;, &quot;Lao People&#39;s Democratic Republic&quot;,
-                        &quot;Mongolia&quot;, &quot;Myanmar&quot;, &quot;Nepal&quot;, &quot;Solomon Islands&quot;, &quot;Thailand&quot;, &quot;Timor-Leste&quot;)) %&gt;%
-  select(country, year, mdr_succ, xdr_succ) %&gt;%
-  na.omit(mdr_success) %&gt;%
-  na.omit(xdr_success) %&gt;%
-  mutate(mdr_xdr_success = as.numeric(mdr_succ) + as.numeric(xdr_succ)) %&gt;%
-  select(-mdr_succ, -xdr_succ) %&gt;%
-  mutate(
-    year = as.integer(year), 
-    mdr_xdr_success = as.integer(mdr_xdr_success))
-  
-p &lt;- ggplot(data = TB_success, aes(x = year, y = mdr_xdr_success, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = &quot;Year&quot;, title = &quot;Number of MDR-TB and XDR-TB patients who completed treatments or were cured&quot;) +
-  scale_y_continuous(name = &quot;Number of patients&quot;) +
-  theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
-
-p + transition_reveal(year)</code></pre>
-<p><img src="Mortality_files/figure-html/unnamed-chunk-3-1.gif" width="90%" /></p>
+  scale_y_continuous(name =&quot;Proportion of deaths from TB&quot;)</code></pre>
 
 
 
