@@ -12,6 +12,8 @@ library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(reshape2)
+library(gganimate)
+library(htmlwidgets)
 knitr::opts_chunk$set(
   fig.width = 6,
   fig.asp = .6,
@@ -26,51 +28,55 @@ scale_colour_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-```{Tidy TB funding data}
-TB_funding = read.csv("./data/TB_expenditure_utilisation.csv")
 
-TB_tot_funding =
-  TB_funding %>%
-  filter(country %in% c("Bangladesh", "Cambodia", "India", "Indonesia", "Lao People's Democratic Republic",
-                        "Mongolia", "Myanmar", "Nepal", "Solomon Islands", "Thailand", "Timor-Leste")) %>%
-  select(country, year, rcvd_tot_sources) %>%
-  rename(funding = rcvd_tot_sources) %>%
-  mutate(
-    year = as.factor(year), 
-    funding = as.numeric(funding))
-
-ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Total funding received in each country in 2017~2019") +
-  scale_y_continuous(name ="Funding ($)", labels = scales::comma)
-```
-
-
-```{Tidy TB mortality data}
+```{r}
 TB_burden = read.csv("./data/TB_burden_countries.csv")
 
 TB_mort =
   TB_burden %>%
   filter(country %in% c("Bangladesh", "Cambodia", "India", "Indonesia", "Lao People's Democratic Republic",
                         "Mongolia", "Myanmar", "Nepal", "Solomon Islands", "Thailand", "Timor-Leste")) %>%
-  filter(year %in% c("2017", "2018", "2019")) %>%
   select(country, year, e_pop_num, e_mort_num) %>%
   mutate(e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num)) %>%
   select(-e_pop_num, -e_mort_num) %>%
   mutate(
-    year = as.factor(year), 
+    year = as.numeric(year), 
     e_mort_pro = as.numeric(e_mort_pro))
 
-ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
+p <- ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
   geom_line(aes(color = country)) +
   geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2017~2019") +
-  scale_y_continuous(name ="Proportion of deaths from TB")
+  labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2000~2019") +
+  scale_y_continuous(name = "Proportion of deaths from TB") +
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
+p + transition_reveal(year)
 ```
 
+```{r}
+TB_outcomes = read.csv("./data/TB_outcomes.csv")
 
+TB_success = 
+  TB_outcomes %>%
+  filter(country %in% c("Bangladesh", "Cambodia", "India", "Indonesia", "Lao People's Democratic Republic",
+                        "Mongolia", "Myanmar", "Nepal", "Solomon Islands", "Thailand", "Timor-Leste")) %>%
+  select(country, year, mdr_succ, xdr_succ) %>%
+  na.omit(mdr_success) %>%
+  na.omit(xdr_success) %>%
+  mutate(mdr_xdr_success = as.numeric(mdr_succ) + as.numeric(xdr_succ)) %>%
+  select(-mdr_succ, -xdr_succ) %>%
+  mutate(
+    year = as.integer(year), 
+    mdr_xdr_success = as.integer(mdr_xdr_success))
+  
+p <- ggplot(data = TB_success, aes(x = year, y = mdr_xdr_success, group = country)) +
+  geom_line(aes(color = country)) +
+  geom_point(aes(color = country)) +
+  labs(x = "Year", title = "Number of MDR-TB and XDR-TB patients who completed treatments or were cured") +
+  scale_y_continuous(name = "Number of patients") +
+  theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
 
+p + transition_reveal(year)
+```
 
 
 
