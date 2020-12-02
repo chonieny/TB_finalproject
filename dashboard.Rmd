@@ -1,17 +1,20 @@
 ---
-title: "Graphs for Total Received Funding and Estimated Number of Deaths from TB 2017~2019"
+title: "Dashboard"
 output: 
-  html_document:
-    toc: true
-    toc_float: true
-    theme: cerulean
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source: embed
 ---
 
-```{r}
+```{r setup, include=FALSE}
+library(flexdashboard)
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(reshape2)
+library(gganimate)
+
 knitr::opts_chunk$set(
   fig.width = 6,
   fig.asp = .6,
@@ -26,58 +29,13 @@ scale_colour_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-```{Tidy TB funding data}
-TB_funding = read.csv("./data/TB_expenditure_utilisation.csv")
 
-TB_tot_funding =
-  TB_funding %>%
-  filter(country %in% c("Bangladesh", "Cambodia", "India", "Indonesia", "Lao People's Democratic Republic",
-                        "Mongolia", "Myanmar", "Nepal", "Solomon Islands", "Thailand", "Timor-Leste")) %>%
-  select(country, year, rcvd_tot_sources) %>%
-  rename(funding = rcvd_tot_sources) %>%
-  mutate(
-    year = as.factor(year), 
-    funding = as.numeric(funding))
-```
+Column {data-width=650}
+-----------------------------------------------------------------------
 
-```{Graph: Total funding received in each country in 2017-2019}
-funding_graph= 
-  ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Total funding received in each country in 2017~2019") +
-  scale_y_continuous(name ="Funding ($)", labels = scales::comma)
-```
-
-```{Tidy TB mortality data}
-TB_burden = read.csv("./data/TB_burden_countries.csv")
-
-TB_mort =
-  TB_burden %>%
-  filter(country %in% c("Bangladesh", "Cambodia", "India", "Indonesia", "Lao People's Democratic Republic",
-                        "Mongolia", "Myanmar", "Nepal", "Solomon Islands", "Thailand", "Timor-Leste")) %>%
-  filter(year %in% c("2017", "2018", "2019")) %>%
-  select(country, year, e_pop_num, e_mort_num) %>%
-  mutate(e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num)) %>%
-  select(-e_pop_num, -e_mort_num) %>%
-  mutate(
-    year = as.factor(year), 
-    e_mort_pro = as.numeric(e_mort_pro))
-```
-
-```{Graph: Estimated proportions of death from TB in each country in 2017~2019}
-  ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2017~2019") +
-  scale_y_continuous(name ="Proportion of deaths from TB")
-```
-
-
+### Chart A
 
 ```{r}
-library(gganimate)
-
 TB_burden = read.csv("./data/TB_burden_countries.csv")
 
 TB_mort =
@@ -94,12 +52,16 @@ TB_mort =
 p <- ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
   geom_line(aes(color = country)) +
   geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2017~2019") +
+  labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2000~2019") +
   scale_y_continuous(name = "Proportion of deaths from TB") +
   theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
-
 p + transition_reveal(year)
 ```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
 
 ```{r}
 TB_outcomes = read.csv("./data/TB_outcomes.csv")
@@ -125,5 +87,11 @@ p <- ggplot(data = TB_success, aes(x = year, y = mdr_xdr_success, group = countr
   theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
 
 p + transition_reveal(year)
+```
+
+### Chart C
+
+```{r}
+
 ```
 
