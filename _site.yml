@@ -3,9 +3,9 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "Mortality"
+    - text: "Animated Graphs"
       href: Mortality.html
-    - text: "Dashboard"
+    - text: "Mortality & Funding"
       href: dashboard.html
     - text: "Regression Analysis"
       href: Regression.html
