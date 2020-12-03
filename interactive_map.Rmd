@@ -1,0 +1,74 @@
+---
+title: "Interactive map"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: cerulean
+---
+```{r include=FALSE}
+library(tidyverse)
+library(gapminder)
+library(echarts4r)
+library(gganimate)
+library(ggiraph)
+library(widgetframe)
+library(ggthemes)
+library(plotly)
+library(viridis)
+library(DT)
+library(gifski)
+library(png)
+
+```
+
+```{r include=FALSE}
+TB_burden = read.csv("./data/TB_burden_countries.csv")
+
+TB_burden = TB_burden %>%
+  mutate(
+    e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num),
+    e_mort_pro_100k = as.numeric(e_mort_num)/as.numeric(e_pop_num) * 100000
+  ) %>%
+  select(
+    country, year, e_mort_num
+  )
+
+world <- map_data("world") %>%
+  filter(region != "Antarctica")
+```
+
+```{r}
+interactive_map = TB_burden %>%
+  right_join(world, by = c(country = "region")) %>%
+  ggplot(aes(long, lat, group = group, fill= e_mort_num)) +
+  geom_polygon(color = "white", size = 0.01) +
+  theme_void() +
+  scale_fill_viridis(option = "B",
+                     name= "Estimated number of deaths from TB",
+                     guide = guide_colorbar(
+                       direction = "horizontal",
+                       barheight = unit(2, units = "mm"),
+                       barwidth = unit(100, units = "mm"),
+                       draw.ulim = FALSE,
+                       title.position = "top",
+                       title.hjust = 0.5,
+                       title.vjust = 0.5 )) +
+  labs(title="Estimated number of deaths from TB",
+       subtitle = "{current_frame}",
+       caption = "Source: gapminder.org")  +
+  theme(
+    plot.title = element_text(size = 12, hjust = 0.5),
+    plot.subtitle = element_text(size = 10, hjust = 0.5),
+    plot.caption = element_text(size = 8, hjust = 1),
+    legend.position = "bottom") +
+  coord_fixed (ratio = 1.3) +
+  transition_manual(year)
+
+
+animate(interactive_map, 
+        fps = 10, 
+        height = 500, 
+        width = 700)
+```
+

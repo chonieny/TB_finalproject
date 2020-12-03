@@ -9,6 +9,8 @@ navbar:
       href: dashboard.html
     - text: "Regression Analysis"
       href: Regression.html
+    - text: "Interactive Map"
+      href: interactive_map.html     
     - text: "Report"
       href: Report.html
     - icon: fa-envelope fa-lg

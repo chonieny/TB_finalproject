@@ -11,7 +11,7 @@
 
 
 
-<title>Regression Analysis</title>
+<title>Interactive map</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -362,9 +362,6 @@ div.tocify {
   <a href="Regression.html">Regression Analysis</a>
 </li>
 <li>
-  <a href="interactive_map.html">Interactive Map</a>
-</li>
-<li>
   <a href="Report.html">Report</a>
 </li>
 <li>
@@ -388,85 +385,50 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Regression Analysis</h1>
+<h1 class="title toc-ignore">Interactive map</h1>
 
 </div>
 
 
-<p>The main dataset for our project is made by World Health Organization. It can be access at <a href="https://www.who.int/teams/global-tuberculosis-programme/data">here</a>. The dataset which consists types of usage funding has a range from 2017-2019, and other datset that consists estimated mortality of TB cases has a range of 2000 to 2019. To make the data consistent, we will use the data from 2017 to 2019.</p>
-<p>Variables that we are going to use are:</p>
-<ul>
-<li><p><strong>rcvd_patsup</strong>: Funding received for patient support (US Dollars)</p></li>
-<li><p><strong>rcvd_staff</strong>: Funding received for National TB Programme staff (central unit staff and subnational TB staff) (US Dollars)</p></li>
-<li><p><strong>rcvd_mdrmgt</strong>:Funding received for programme costs to treat drug-resistant TB (US Dollars)</p></li>
-<li><p><strong>rcvd_fld</strong>:Funding received for drugs to treat drug-susceptible TB (US Dollars)</p></li>
-<li><p><strong>rcvd_oth</strong>:Funding received for all other budget line items (US Dollars)</p></li>
-<li><p><strong>e_mort_num</strong>: Estimated number of deaths from TB (all forms)</p></li>
-<li><p><strong>e_pop_num</strong>: Estimated total population number</p></li>
-</ul>
-<p>To be more accurate, we will make a new variable called <strong>e_mort_pro_100k</strong>, a proportion of estimated proportion of death from TB by dividing the estimated number of deaths from TB(<strong>e_mort_num</strong>) by estimated total population number(<strong>e_pop_num</strong>) and multiply by 100,000.</p>
-<p>There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.</p>
-<div id="type-of-usage-funding-in-each-country" class="section level1">
-<h1>Type of Usage Funding in Each Country</h1>
-<div id="section" class="section level2">
-<h2>2017</h2>
-<p>#######WRITE FINDINGS####### <img src="Regression_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
-</div>
-<div id="section-1" class="section level2">
-<h2>2018</h2>
-<p>#######WRITE FINDINGS####### <img src="Regression_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
-</div>
-<div id="section-2" class="section level2">
-<h2>2019</h2>
-<p>#######WRITE FINDINGS####### <img src="Regression_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
-</div>
-</div>
-<div id="estimated-average-duration-of-stay-if-patients-starting-mdr-tbxdr-tb-treatment-are-hospitalized-days" class="section level1">
-<h1>Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</h1>
-<pre><code>## Joining, by = &quot;country&quot;
-## Joining, by = &quot;country&quot;</code></pre>
-<p><img src="Regression_files/figure-html/unnamed-chunk-6-1.png" width="90%" /><img src="Regression_files/figure-html/unnamed-chunk-6-2.png" width="90%" /></p>
-</div>
-<div id="transformation-and-assumption-of-the-normality" class="section level1">
-<h1>Transformation and Assumption of the Normality</h1>
-<p>Below is the density graph of proportion of the estimated mortality of TB per 100k. Since the graph is right-skewed, we need to make some changes to make this to satisfy the assumptions of the linear model.</p>
-<p><img src="Regression_files/figure-html/GGPLOT-1.png" width="90%" /></p>
-<p>We used log transformation to make the graph normal. Below is the graph after the transformation, and we can say that it is more bell-shaped than the previous graph. <img src="Regression_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
-</div>
-<div id="results" class="section level1">
-<h1>Results</h1>
-<p>With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. We have included the interaction between <strong>rcvd_patsup</strong> and <strong>rcvd_staff</strong> because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.</p>
-<p>Based on transformation above, the model we are going to fit is: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other + \beta_7 patient*staff\]</span></p>
-<pre class="r"><code>summary(lm_model)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = hospd_mdr_dur ~ year + rcvd_patsup + rcvd_staff + 
-##     rcvd_mdrmgt + rcvd_fld + rcvd_oth + rcvd_patsup * rcvd_staff, 
-##     data = TB_regression)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -131.18  -68.66   -7.71   21.51  369.00 
-## 
-## Coefficients:
-##                          Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)             3.676e+04  3.139e+03  11.712  &lt; 2e-16 ***
-## year                   -1.816e+01  1.555e+00 -11.676  &lt; 2e-16 ***
-## rcvd_patsup            -1.544e-05  1.034e-06 -14.933  &lt; 2e-16 ***
-## rcvd_staff             -9.157e-07  2.543e-07  -3.600  0.00032 ***
-## rcvd_mdrmgt             5.270e-06  3.414e-07  15.439  &lt; 2e-16 ***
-## rcvd_fld               -4.101e-06  3.279e-07 -12.508  &lt; 2e-16 ***
-## rcvd_oth               -1.313e-06  1.890e-07  -6.947 4.06e-12 ***
-## rcvd_patsup:rcvd_staff  1.836e-13  1.160e-14  15.820  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 99.85 on 7054 degrees of freedom
-## Multiple R-squared:  0.1751, Adjusted R-squared:  0.1743 
-## F-statistic:   214 on 7 and 7054 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>Based on the summary, we can see that some of our main effects and the interaction term are statistically significant.</p>
-<p>The F-statistics is 2221.3144029. It’s obvious that the model is statistically significant under any reasonable critical value. It also has a R2 value of 0.5108901, which indicated chosen variables together are able to explain 51.09% of observed variation.</p>
-</div>
+<pre class="r"><code>world &lt;- map_data(&quot;world&quot;) %&gt;%
+  filter(region != &quot;Antarctica&quot;)
+
+interactive_map = TB_burden %&gt;%
+  right_join(world, by = c(country = &quot;region&quot;)) %&gt;%
+  ggplot(aes(long, lat, 
+             group= group, 
+             fill= e_mort_num)) +
+  geom_polygon(color = &quot;white&quot;, 
+               size = 0.01) +
+  theme_void() +
+  scale_fill_viridis(option = &quot;B&quot;,
+                     name= &quot;Years&quot;,
+                     guide = guide_colorbar(
+                       direction = &quot;horizontal&quot;,
+                       barheight = unit(2, units = &quot;mm&quot;),
+                       barwidth = unit(100, units = &quot;mm&quot;),
+                       draw.ulim = FALSE,
+                       title.position = &quot;top&quot;,
+                       title.hjust = 0.5,
+                       title.vjust = 0.5 )) +
+  labs(title=&quot;Estimated number of deaths from TB&quot;,
+       subtitle = &quot;{current_frame}&quot;,
+       caption = &quot;Source: gapminder.org&quot;)  +
+  theme(
+    plot.title = element_text(size = 12, hjust = 0.5),
+    plot.subtitle = element_text(size = 10, hjust = 0.5),
+    plot.caption = element_text(size = 8, hjust = 1),
+    legend.position = &quot;bottom&quot;) +
+  coord_fixed (ratio = 1.3) +
+  transition_manual(year)
+
+
+animate(interactive_map, 
+        fps = 10, 
+        height = 500, 
+        width = 700)</code></pre>
+<pre><code>## Warning: No renderer available. Please install the gifski, av, or magick package
+## to create animated output</code></pre>
 
 
 

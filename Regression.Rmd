@@ -228,7 +228,7 @@ TB_burden %>%
 With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. 
 We have included the interaction between **rcvd_patsup** and **rcvd_staff** because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.
 
-```{r}
+```{r include=FALSE}
 df1 = TB_burden %>% 
   select(year, e_inc_num, e_pop_num, e_mort_pro_100k, e_mort_pro )
 
