@@ -353,13 +353,16 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="Mortality.html">Mortality</a>
+  <a href="Mortality.html">Animated Graphs</a>
 </li>
 <li>
-  <a href="dashboard.html">Dashboard</a>
+  <a href="dashboard.html">Mortality &amp; Funding</a>
 </li>
 <li>
   <a href="Regression.html">Regression Analysis</a>
+</li>
+<li>
+  <a href="interactive_map.html">Interactive Map</a>
 </li>
 <li>
   <a href="Report.html">Report</a>
@@ -394,11 +397,9 @@ div.tocify {
 library(dplyr)
 library(ggplot2)
 library(reshape2)
-library(gganimate)</code></pre>
-<pre><code>## Warning: package &#39;gganimate&#39; was built under R version 4.0.3</code></pre>
-<pre class="r"><code>library(htmlwidgets)</code></pre>
-<pre><code>## Warning: package &#39;htmlwidgets&#39; was built under R version 4.0.3</code></pre>
-<pre class="r"><code>knitr::opts_chunk$set(
+library(gganimate)
+library(htmlwidgets)
+knitr::opts_chunk$set(
   fig.width = 6,
   fig.asp = .6,
   out.width = &quot;90%&quot;

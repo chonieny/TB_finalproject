@@ -395,11 +395,8 @@ div.tocify {
 
 <pre class="r"><code>interactive_map = TB_burden %&gt;%
   right_join(world, by = c(country = &quot;region&quot;)) %&gt;%
-  ggplot(aes(long, lat, 
-             group= group, 
-             fill= e_mort_num)) +
-  geom_polygon(color = &quot;white&quot;, 
-               size = 0.01) +
+  ggplot(aes(long, lat, group = group, fill= e_mort_num)) +
+  geom_polygon(color = &quot;white&quot;, size = 0.01) +
   theme_void() +
   scale_fill_viridis(option = &quot;B&quot;,
                      name= &quot;Estimated number of deaths from TB&quot;,
