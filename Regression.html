@@ -404,26 +404,17 @@ div.tocify {
 <li><strong>hospd_mdr_dur</strong>: Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</li>
 </ul>
 <p>There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.</p>
-<<<<<<< HEAD
 <div id="transformation-and-assumption-of-the-normality" class="section level2">
 <h2>Transformation and Assumption of the Normality</h2>
-=======
-<div id="regression-analysis" class="section level1">
-<h1>Regression Analysis</h1>
-<div id="estimated-average-duration-of-stay-if-patients-starting-mdr-tbxdr-tb-treatment-are-hospitalized-days" class="section level2">
-<h2>Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</h2>
-</div>
-</div>
-<div id="transformation-and-assumption-of-the-normality" class="section level1">
-<h1>Transformation and Assumption of the Normality</h1>
->>>>>>> 6d6b19938a0e39a0033721ac8def45d0755b0cdf
 <p>Below is the density graph of estimated average duration of stay. Since the graph is right-skewed, we need to make some changes to make this to satisfy the assumptions of the linear model.</p>
 <p><img src="Regression_files/figure-html/GGPLOT-1.png" width="90%" /></p>
 <p>We used log transformation to make the graph normal. Below is the graph after the transformation, and we can say that it is more bell-shaped than the previous graph. <img src="Regression_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
 </div>
 <div id="results" class="section level2">
 <h2>Results</h2>
-<p>With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. We have included the interaction between <strong>patient</strong> and <strong>staff</strong> because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.</p>
+<div id="results-for-selected-countries" class="section level4">
+<h4>Results for selected countries</h4>
+<p>With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized, and we used the top 5 usages of funding and year. We have also included the interaction between <strong>patient</strong> and <strong>staff</strong> because there could be a possible relationship that the funding for patient support and different national TB programme staffs can affect durations of hospital stay.</p>
 <p>Based on transformation above, the model we are going to fit is: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other\]</span></p>
 <pre><code>## 
 ## Call:
@@ -450,8 +441,12 @@ div.tocify {
 ## Residual standard error: 1.101 on 22 degrees of freedom
 ## Multiple R-squared:  0.4937, Adjusted R-squared:  0.3326 
 ## F-statistic: 3.065 on 7 and 22 DF,  p-value: 0.02071</code></pre>
-<p>Based on the summary, we can see that some of our main effects are not significant due to small data. ## All Countries So, we are going to look at all the countries’ data and find the multiple linear regression.</p>
-<p>Looking at the regression model for all countries, all variables are significant but the interaction between <strong>patient</strong> and <strong>staff</strong> is not significant. Below is the ANOVA Test and we can conclude that since the pvalue is bigger than 0.05, the bigger model is not significant.</p>
+<p>Based on the summary, we can see that some of our main effects are not significant due to small data.</p>
+</div>
+<div id="results-for-all-countries" class="section level4">
+<h4>Results for all countries</h4>
+<p>So, we are going to look at all the countries’ data and find the multiple linear regression.</p>
+<p>Looking at the regression model for all countries, all variables are significant but the interaction between <strong>patient</strong> and <strong>staff</strong> is not significant. Below is the ANOVA Test and we can conclude that since the p-value is bigger than 0.05, the bigger model is not significant.</p>
 <pre class="r"><code>options(&quot;scipen&quot;=100, &quot;digits&quot;=4)
 summary(all_lm_model2)</code></pre>
 <pre><code>## 
@@ -490,10 +485,11 @@ summary(all_lm_model2)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
+</div>
 <div id="prediction" class="section level2">
 <h2>Prediction</h2>
 <p>Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days) in 2020:</p>
-<p>After putting the average funding for each variables, we are 95% confident that the in 2020, the average stay at the hospitals will fall between <strong>-0.3268</strong> and <strong>5.75</strong> days</p>
+<p>After putting the average funding for each variables, we are 95% confident that the in 2020, the average stay at the hospitals for MDR-TB and XDR-TB patients will fall between <strong>-0.3268</strong> and <strong>5.75</strong> days.</p>
 </div>
 
 

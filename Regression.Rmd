@@ -107,17 +107,10 @@ Variables used are:
 * **other**:Funding received for all other budget line items (US Dollars)
 * **hospd_mdr_dur**: Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
 
-
 There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.
 
-<<<<<<< HEAD
 
-=======
-# Regression Analysis
-
-## Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
->>>>>>> 6d6b19938a0e39a0033721ac8def45d0755b0cdf
-```{r include=FALSE, fig.width = 8, fig.height = 10}
+```{r include=FALSE, fig.width = 10, fig.height = 10}
 TB_duration_2017 = TB_usage %>%
   filter(year == "2017") %>%
   mutate(hospd_2017 = hospd_mdr_dur) %>%
@@ -156,8 +149,9 @@ TB_usage %>%
 ```
 
 ## Results
-With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. 
-We have included the interaction between **patient** and **staff** because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.
+
+#### Results for selected countries 
+With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized, and we used the top 5 usages of funding and year. We have also included the interaction between **patient** and **staff** because there could be a possible relationship that the funding for patient support and different national TB programme staffs can affect durations of hospital stay.
 
 ```{r include=FALSE }
 TB_burden = read.csv("./data/TB_burden_countries.csv")
@@ -201,7 +195,8 @@ summary(lm_model1)
 ```
 
 Based on the summary, we can see that some of our main effects are not significant due to small data.
-## All Countries
+
+#### Results for all countries 
 So, we are going to look at all the countries' data and find the multiple linear regression.
 
 ```{r include=FALSE}
@@ -210,7 +205,7 @@ all_lm_model1 = lm(log_hosp ~ year + patient + staff + programme + drugs + other
 all_lm_model2 = lm(log_hosp ~ year + patient + staff + programme + drugs + other, data = TB_regression)
 ```
 Looking at the regression model for all countries,  all variables are significant but the interaction between **patient** and **staff** is not significant.
-Below is the ANOVA Test and we can conclude that since the pvalue is bigger than 0.05, the bigger model is not significant.
+Below is the ANOVA Test and we can conclude that since the p-value is bigger than 0.05, the bigger model is not significant.
 ```{r}
 options("scipen"=100, "digits"=4)
 summary(all_lm_model2)
@@ -235,4 +230,4 @@ newdata = data.frame(year = 2020, patient = 5601390, staff = 13714771, programme
 ```{r include=FALSE}
 predict(lm_model1, newdata, interval="predict")
 ```
-After putting the average funding for each variables, we are  95% confident that the in 2020,  the average stay at the hospitals will fall between **-0.3268** and **5.75** days
+After putting the average funding for each variables, we are  95% confident that the in 2020,  the average stay at the hospitals for MDR-TB and XDR-TB patients will fall between **-0.3268** and **5.75** days. 

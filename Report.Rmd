@@ -67,8 +67,11 @@ Question: What are the estimated number of deaths from TB around the world from 
 Question: What are the top 5 areas that the national TB fundings received were allocated to in each country in each year from 2017~2019? Are there any trends per country and across the countries? Do these trends seem to change over the years? 
 
 ### TB Hospitalization
-After we plotted the density graph, we noticed it was heavily right skewed. So, doing a log transformation made the density look more normal. Thus, doing a log linear regression helped to predict the average hospital stay in 2020.
+Question: What were the number of MDR-TB and XDR-TB patients who completed treatment or were cured in the last 19 years? Are there any trends?
+:What were the estimated duration of stay if these patients starting treatment were hospitalized in 2017~2019? Are there any relationships between the number of these patients who completed treatment and the estimated duration of hospital stay for these patients receiving treatment? 
 
+### Regression Analysis
+After we plotted the density graph, we noticed it was heavily right skewed. So, doing a log transformation made the density look more normal. Thus, doing a log linear regression helped to predict the average hospital stay in 2020.
 Based on the normal transformation, the model we fit was:
 $$log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other$$
 

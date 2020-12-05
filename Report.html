@@ -442,8 +442,11 @@ div.tocify {
 </div>
 <div id="tb-hospitalization" class="section level3">
 <h3>TB Hospitalization</h3>
-<p>After we plotted the density graph, we noticed it was heavily right skewed. So, doing a log transformation made the density look more normal. Thus, doing a log linear regression helped to predict the average hospital stay in 2020.</p>
-<p>Based on the normal transformation, the model we fit was: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other\]</span></p>
+<p>Question: What were the number of MDR-TB and XDR-TB patients who completed treatment or were cured in the last 19 years? Are there any trends? :What were the estimated duration of stay if these patients starting treatment were hospitalized in 2017~2019? Are there any relationships between the number of these patients who completed treatment and the estimated duration of hospital stay for these patients receiving treatment?</p>
+</div>
+<div id="regression-analysis" class="section level3">
+<h3>Regression Analysis</h3>
+<p>After we plotted the density graph, we noticed it was heavily right skewed. So, doing a log transformation made the density look more normal. Thus, doing a log linear regression helped to predict the average hospital stay in 2020. Based on the normal transformation, the model we fit was: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other\]</span></p>
 <p>With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized, and We used the top 5 usages of funding and year. We have also included the interaction between <strong>patient</strong> and <strong>staff</strong> because there could be a possible relationship that the funding for patient support and different national TB programme staffs can affect durations of hospital stay.</p>
 <p>However, with the countries that we selected, there was not enough significant data to conduct multiple linear regression. Thus, we haved used all the countries in the datasets for increased accuracy and significance. After conducting such linear regression including all countries, we could see that F-statistic is 911.8 with the p-value of less than 0.05. We also conducted the ANOVA test to see if the interaction variable is crucial or not, and the result showed that it is significant. Therefore, we can use this regression to predict the average length of hospital stay for MDR-TB and XDR-TB patients getting treatment in 2020.</p>
 </div>
