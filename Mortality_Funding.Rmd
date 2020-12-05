@@ -1,5 +1,5 @@
 ---
-title: "Mortality & Funding graphs"
+title: "Mortality & Funding"
 output: 
   html_document:
     toc: true

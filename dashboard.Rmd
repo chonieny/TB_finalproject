@@ -83,10 +83,8 @@ usage_2019_top5 = TB_usage %>%
 ```
 
 
-Column {data-width=650}
+{data-width=650}
 -----------------------------------------------------------------------
-
-### 2017
 
 ```{r echo = FALSE, message = FALSE}
 ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
@@ -97,10 +95,8 @@ ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
-Column {data-width=350}
+{data-width=350}
 -----------------------------------------------------------------------
-
-### 2018
 
 ```{r echo = FALSE, message = FALSE}
 ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
@@ -111,7 +107,6 @@ ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
-### 2019
 
 ```{r echo = FALSE, message = FALSE}
 ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +

@@ -1,5 +1,5 @@
 ---
-title: "Graphs for treatment data of MDR-TB & XDR-TB Patients"
+title: "MDR-TB & XDR-TB Patients Treatment Data"
 output: 
   html_document:
     toc: true
