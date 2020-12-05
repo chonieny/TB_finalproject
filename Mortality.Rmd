@@ -1,5 +1,5 @@
 ---
-title: "Graphs for Total Received Funding and Estimated Number of Deaths from TB 2017~2019"
+title: "Graphs for treatment data of MDR-TB & XDR-TB Patients"
 output: 
   html_document:
     toc: true
@@ -7,13 +7,15 @@ output:
     theme: cerulean
 ---
 
-```{r}
+```{r include = FALSE}
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
 library(reshape2)
 library(gganimate)
 library(htmlwidgets)
+library(tidyverse)
+library(ggalt)   
 knitr::opts_chunk$set(
   fig.width = 6,
   fig.asp = .6,
@@ -30,30 +32,8 @@ scale_fill_discrete = scale_fill_viridis_d
 
 
 ```{r}
-TB_burden = read.csv("./data/TB_burden_countries.csv")
-
-TB_mort =
-  TB_burden %>%
-  filter(country %in% c("Bangladesh", "Cambodia", "India", "Indonesia", "Lao People's Democratic Republic",
-                        "Mongolia", "Myanmar", "Nepal", "Solomon Islands", "Thailand", "Timor-Leste")) %>%
-  select(country, year, e_pop_num, e_mort_num) %>%
-  mutate(e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num)) %>%
-  select(-e_pop_num, -e_mort_num) %>%
-  mutate(
-    year = as.numeric(year), 
-    e_mort_pro = as.numeric(e_mort_pro))
-
-p <- ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2000~2019") +
-  scale_y_continuous(name = "Proportion of deaths from TB") +
-  theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
-p + transition_reveal(year)
-```
-
-```{r}
 TB_outcomes = read.csv("./data/TB_outcomes.csv")
+TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
 
 TB_success = 
   TB_outcomes %>%
@@ -78,6 +58,101 @@ p <- ggplot(data = TB_success, aes(x = year, y = mdr_xdr_success, group = countr
 p + transition_reveal(year)
 ```
 
+```{r tidy data, include = FALSE}
+table(TB_usage$g_whoregion) #We will use WPR(Western Pacific) , SEA(South East Asia)
+TB_usage = TB_usage %>%
+  select(
+    country, year, g_whoregion,hospd_mdr_dur,
+    rcvd_fld, rcvd_lab, rcvd_mdrmgt, rcvd_orsrvy, rcvd_oth, rcvd_patsup, 
+    rcvd_prog, rcvd_sld, rcvd_staff, rcvd_tbhiv, rcvd_tpt
+  ) %>%
+  filter(
+    g_whoregion == "WPR" | g_whoregion == "SEA"
+  ) %>%
+  select(-g_whoregion)
+
+colSums(is.na(TB_usage)) #remove rcvd_tpt because there are many NAs.
+
+TB_usage = TB_usage %>% 
+  select(-rcvd_tpt) 
+
+colSums(is.na(TB_usage))
+
+TB_usage = TB_usage %>%
+  na.omit(rcvd_fld)
+
+TB_usage = TB_usage[TB_usage$country %in% names(which(table(TB_usage$country) > 2)), ] 
+#remove the data that doesn't have 2017,2018,2019
+```
 
 
+```{r Variable:Types of Usage funding in each country in 2017-2019, include=FALSE}
+unique(TB_usage$country)
+colSums(TB_usage == 0)
+
+TB_usage %>%
+  select(-country, -year) %>%
+  colMeans() %>%
+  order() 
+#top 5 usage type of fundings are: rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth
+
+usage_2017_top5 = TB_usage %>% 
+  filter(year == "2017") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+
+usage_2018_top5 = TB_usage %>% 
+  filter(year == "2018") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+
+usage_2019_top5 = TB_usage %>% 
+  filter(year == "2019") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+```
+
+
+# Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
+```{r include=FALSE}
+TB_duration_2017 = TB_usage %>%
+  filter(year == "2017") %>%
+  mutate(hospd_2017 = hospd_mdr_dur) %>%
+  select(country, hospd_2017)
+
+TB_duration_2018 = TB_usage %>%
+  filter(year == "2018") %>%
+  mutate(hospd_2018 = hospd_mdr_dur) %>%
+  select(country, hospd_2018)
+
+TB_duration_2019 = TB_usage %>%
+  filter(year == "2019") %>%
+  mutate(hospd_2019 = hospd_mdr_dur) %>%
+  select(country, hospd_2019)
+
+TB_duration = full_join(inner_join(TB_duration_2017, TB_duration_2018), TB_duration_2019)
+```
+
+```{r echo=FALSE}
+TB_duration = full_join(inner_join(TB_duration_2017, TB_duration_2018), TB_duration_2019)
+
+ggplot() +
+  geom_segment(data=TB_duration, aes(y = country, yend = country, x = 0, xend = .5), 
+               color = "#b2b2b2", size = 0.15) + 
+  geom_dumbbell(data = TB_duration, aes(y=country, x = hospd_2017, xend = hospd_2019),
+                size = 1.5, color = "#b2b2b2", size_x = 3, size_xend = 3, colour_x = "red",
+                colour_xend = "blue") +
+  labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
+       title = "Estimated average duration of stay if patients starting MDR-TB/XDR-TB
+       treatment are hospitalized (days)") +
+  theme(axis.text.y = element_text(angle = 45, vjust = 0.5, hjust = 1))
+
+
+ggplot(data = TB_usage, aes(x = country, y = hospd_mdr_dur, fill = year)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
+       title = "Estimated average duration of stay if patients starting MDR-TB/XDR-TB
+       treatment are hospitalized (days)") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1)) 
+```
 

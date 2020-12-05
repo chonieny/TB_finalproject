@@ -26,11 +26,11 @@ scale_colour_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-```{r Regression Analysis JUYOUNG, include=FALSE}
+```{r include = FALSE}
 TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
 ```
 
-```{r tidy data, include=FALSE}
+```{r tidy data, include = FALSE}
 table(TB_usage$g_whoregion) #We will use WPR(Western Pacific) , SEA(South East Asia)
 TB_usage = TB_usage %>%
   select(
@@ -84,12 +84,9 @@ usage_2019_top5 = TB_usage %>%
 ```
 
 
-
-
 The main dataset for our project is made by  World Health Organization. It can be access at [here](https://www.who.int/teams/global-tuberculosis-programme/data). The dataset which consists types of usage funding has a range from 2017-2019, and other datset that consists estimated mortality of TB cases has a range of 2000 to 2019. To make the data consistent, we will use the data from 2017 to 2019.
 
 Variables that we are going to use are:
-
 
 * **rcvd_patsup**: Funding received for patient support (US Dollars)
 * **rcvd_staff**: Funding received for National TB Programme staff (central unit staff and subnational TB staff)  (US Dollars)
@@ -105,40 +102,6 @@ To be more accurate, we will make a new variable called **e_mort_pro_100k**, a p
 
 There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.
 
-
-# Type of Usage Funding in Each Country
-## 2017
-#######WRITE FINDINGS#######
-```{r echo=FALSE}
-ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
-  geom_bar(stat = "identity") +
-  scale_fill_brewer(palette = "Paired") +
- labs(x = "Countries", title = "Types of Usage funding in each country in 2017") +
-  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
-```
-
-## 2018
-#######WRITE FINDINGS#######
-```{r echo=FALSE}
-ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
-  geom_bar(stat = "identity") +
-  scale_fill_brewer(palette = "Paired") +
- labs(x = "Countries", title = "Types of Usage funding in each country in 2018") +
-  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
-```
-
-## 2019
-#######WRITE FINDINGS#######
-```{r echo=FALSE}
-ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +
-  geom_bar(stat = "identity") +
-  scale_fill_brewer(palette = "Paired") +
- labs(x = "Countries", title = "Types of Usage funding in each country in 2019") +
-  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
-```
 
 # Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
 ```{r include=FALSE}

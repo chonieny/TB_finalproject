@@ -1,5 +1,5 @@
 ---
-title: "Dashboard"
+title: "Types of Usage of Funding in Each Country"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -7,7 +7,8 @@ output:
     source: embed
 ---
 
-```{r setup, include=FALSE}
+```{r include = FALSE}
+TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
 library(flexdashboard)
 library(tidyverse)
 library(dplyr)
@@ -28,64 +29,96 @@ scale_colour_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
+```{r tidy data, include = FALSE}
+table(TB_usage$g_whoregion) #We will use WPR(Western Pacific) , SEA(South East Asia)
+TB_usage = TB_usage %>%
+  select(
+    country, year, g_whoregion,hospd_mdr_dur,
+    rcvd_fld, rcvd_lab, rcvd_mdrmgt, rcvd_orsrvy, rcvd_oth, rcvd_patsup, 
+    rcvd_prog, rcvd_sld, rcvd_staff, rcvd_tbhiv, rcvd_tpt
+  ) %>%
+  filter(
+    g_whoregion == "WPR" | g_whoregion == "SEA"
+  ) %>%
+  select(-g_whoregion)
+
+colSums(is.na(TB_usage)) #remove rcvd_tpt because there are many NAs.
+
+TB_usage = TB_usage %>% 
+  select(-rcvd_tpt) 
+
+colSums(is.na(TB_usage))
+
+TB_usage = TB_usage %>%
+  na.omit(rcvd_fld)
+
+TB_usage = TB_usage[TB_usage$country %in% names(which(table(TB_usage$country) > 2)), ] 
+#remove the data that doesn't have 2017,2018,2019
+```
+
+```{r Variable:Types of Usage funding in each country in 2017-2019, include=FALSE}
+unique(TB_usage$country)
+colSums(TB_usage == 0)
+
+TB_usage %>%
+  select(-country, -year) %>%
+  colMeans() %>%
+  order() 
+#top 5 usage type of fundings are: rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth
+
+usage_2017_top5 = TB_usage %>% 
+  filter(year == "2017") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+
+usage_2018_top5 = TB_usage %>% 
+  filter(year == "2018") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+
+usage_2019_top5 = TB_usage %>% 
+  filter(year == "2019") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+```
+
 
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Chart A
+### 2017
 
 ```{r}
-TB_funding = read.csv("./data/TB_expenditure_utilisation.csv")
-
-TB_tot_funding =
-  TB_funding %>%
-  filter(country %in% c("Bangladesh", "Cambodia", "India", "Indonesia", "Lao People's Democratic Republic",
-                        "Mongolia", "Myanmar", "Nepal", "Solomon Islands", "Thailand", "Timor-Leste")) %>%
-  select(country, year, rcvd_tot_sources) %>%
-  rename(funding = rcvd_tot_sources) %>%
-  mutate(
-    year = as.factor(year), 
-    funding = as.numeric(funding))
-
-
-ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Total funding received in each country in 2017~2019") +
-  scale_y_continuous(name = "Funding ($)", labels = scales::comma)
+ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Paired") +
+ labs(x = "Countries", title = "Types of Usage funding in each country in 2017") +
+  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+### 2018
 
 ```{r}
-TB_burden = read.csv("./data/TB_burden_countries.csv")
-
-TB_mort =
-  TB_burden %>%
-  filter(country %in% c("Bangladesh", "Cambodia", "India", "Indonesia", "Lao People's Democratic Republic",
-                        "Mongolia", "Myanmar", "Nepal", "Solomon Islands", "Thailand", "Timor-Leste")) %>%
-  filter(year %in% c("2017", "2018", "2019")) %>%
-  select(country, year, e_pop_num, e_mort_num) %>%
-  mutate(e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num)) %>%
-  select(-e_pop_num, -e_mort_num) %>%
-  mutate(
-    year = as.factor(year), 
-    e_mort_pro = as.numeric(e_mort_pro))
-
-
-ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2017~2019") +
-  scale_y_continuous(name = "Proportion of deaths from TB")
+ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Paired") +
+ labs(x = "Countries", title = "Types of Usage funding in each country in 2018") +
+  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
-### Chart C
+### 2019
 
 ```{r}
-
+ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Paired") +
+ labs(x = "Countries", title = "Types of Usage funding in each country in 2019") +
+  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 

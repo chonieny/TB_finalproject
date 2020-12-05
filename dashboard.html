@@ -8,9 +8,9 @@
 
 
 
-<title>Dashboard</title>
+<title>Types of Usage of Funding in Each Country</title>
 
-<meta property="og:title" content="Dashboard" />
+<meta property="og:title" content="Types of Usage of Funding in Each Country" />
 
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
 
@@ -814,7 +814,7 @@ html, body {
   
 </span>
 <span class="navbar-brand">
-  Dashboard
+  Types of Usage of Funding in Each Country
   <span class="navbar-author">
         </span>
 </span>
@@ -829,8 +829,9 @@ html, body {
 </div><!--/.container-->
 </div><!--/.navbar-->
 
-<img class="mobile-figure" data-mobile-figure-id=fig1 src="dashboard_files/figure-html/unnamed-chunk-1-1.mb.png" />
-<img class="mobile-figure" data-mobile-figure-id=fig2 src="dashboard_files/figure-html/unnamed-chunk-2-1.mb.png" />
+<img class="mobile-figure" data-mobile-figure-id=fig1 src="dashboard_files/figure-html/unnamed-chunk-2-1.mb.png" />
+<img class="mobile-figure" data-mobile-figure-id=fig2 src="dashboard_files/figure-html/unnamed-chunk-3-1.mb.png" />
+<img class="mobile-figure" data-mobile-figure-id=fig3 src="dashboard_files/figure-html/unnamed-chunk-4-1.mb.png" />
 <script type="text/javascript">
 
 
@@ -2625,28 +2626,29 @@ window.FlexDashboardComponents.push({
 
 <div id="column" class="section level2" data-width="650">
 <h2>Column</h2>
-<div id="chart-a" class="section level3">
-<h3>Chart A</h3>
+<div id="section" class="section level3">
+<h3>2017</h3>
 <div class="knitr-options" data-fig-width="576" data-fig-height="345">
 
 </div>
-<p><img src="dashboard_files/figure-html/unnamed-chunk-1-1.png" width="90%" data-figure-id=fig1 /></p>
+<p><img src="dashboard_files/figure-html/unnamed-chunk-2-1.png" width="90%" data-figure-id=fig1 /></p>
 </div>
 </div>
 <div id="column-1" class="section level2" data-width="350">
 <h2>Column</h2>
-<div id="chart-b" class="section level3">
-<h3>Chart B</h3>
+<div id="section-1" class="section level3">
+<h3>2018</h3>
 <div class="knitr-options" data-fig-width="576" data-fig-height="345">
 
 </div>
-<p><img src="dashboard_files/figure-html/unnamed-chunk-2-1.png" width="90%" data-figure-id=fig2 /></p>
+<p><img src="dashboard_files/figure-html/unnamed-chunk-3-1.png" width="90%" data-figure-id=fig2 /></p>
 </div>
-<div id="chart-c" class="section level3">
-<h3>Chart C</h3>
+<div id="section-2" class="section level3">
+<h3>2019</h3>
 <div class="knitr-options" data-fig-width="576" data-fig-height="345">
 
 </div>
+<p><img src="dashboard_files/figure-html/unnamed-chunk-4-1.png" width="90%" data-figure-id=fig3 /></p>
 </div>
 </div>
 
@@ -2670,7 +2672,7 @@ $(document).ready(function () {
 
 <div id="flexdashboard-source-code">
 <pre class="line-numbers"><code class="language-r">---
-title: "Dashboard"
+title: "Types of Usage of Funding in Each Country"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -2678,7 +2680,8 @@ output:
     source: embed
 ---
 
-```{r setup, include=FALSE}
+```{r include = FALSE}
+TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
 library(flexdashboard)
 library(tidyverse)
 library(dplyr)
@@ -2699,65 +2702,97 @@ scale_colour_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
+```{r tidy data, include = FALSE}
+table(TB_usage$g_whoregion) #We will use WPR(Western Pacific) , SEA(South East Asia)
+TB_usage = TB_usage %>%
+  select(
+    country, year, g_whoregion,hospd_mdr_dur,
+    rcvd_fld, rcvd_lab, rcvd_mdrmgt, rcvd_orsrvy, rcvd_oth, rcvd_patsup, 
+    rcvd_prog, rcvd_sld, rcvd_staff, rcvd_tbhiv, rcvd_tpt
+  ) %>%
+  filter(
+    g_whoregion == "WPR" | g_whoregion == "SEA"
+  ) %>%
+  select(-g_whoregion)
+
+colSums(is.na(TB_usage)) #remove rcvd_tpt because there are many NAs.
+
+TB_usage = TB_usage %>% 
+  select(-rcvd_tpt) 
+
+colSums(is.na(TB_usage))
+
+TB_usage = TB_usage %>%
+  na.omit(rcvd_fld)
+
+TB_usage = TB_usage[TB_usage$country %in% names(which(table(TB_usage$country) > 2)), ] 
+#remove the data that doesn't have 2017,2018,2019
+```
+
+```{r Variable:Types of Usage funding in each country in 2017-2019, include=FALSE}
+unique(TB_usage$country)
+colSums(TB_usage == 0)
+
+TB_usage %>%
+  select(-country, -year) %>%
+  colMeans() %>%
+  order() 
+#top 5 usage type of fundings are: rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth
+
+usage_2017_top5 = TB_usage %>% 
+  filter(year == "2017") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+
+usage_2018_top5 = TB_usage %>% 
+  filter(year == "2018") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+
+usage_2019_top5 = TB_usage %>% 
+  filter(year == "2019") %>%
+  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  melt(id.vars = 'country', variable.name = 'usage_type')
+```
+
 
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Chart A
+### 2017
 
 ```{r}
-TB_funding = read.csv("./data/TB_expenditure_utilisation.csv")
-
-TB_tot_funding =
-  TB_funding %>%
-  filter(country %in% c("Bangladesh", "Cambodia", "India", "Indonesia", "Lao People's Democratic Republic",
-                        "Mongolia", "Myanmar", "Nepal", "Solomon Islands", "Thailand", "Timor-Leste")) %>%
-  select(country, year, rcvd_tot_sources) %>%
-  rename(funding = rcvd_tot_sources) %>%
-  mutate(
-    year = as.factor(year), 
-    funding = as.numeric(funding))
-
-
-ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Total funding received in each country in 2017~2019") +
-  scale_y_continuous(name = "Funding ($)", labels = scales::comma)
+ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Paired") +
+ labs(x = "Countries", title = "Types of Usage funding in each country in 2017") +
+  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+### 2018
 
 ```{r}
-TB_burden = read.csv("./data/TB_burden_countries.csv")
-
-TB_mort =
-  TB_burden %>%
-  filter(country %in% c("Bangladesh", "Cambodia", "India", "Indonesia", "Lao People's Democratic Republic",
-                        "Mongolia", "Myanmar", "Nepal", "Solomon Islands", "Thailand", "Timor-Leste")) %>%
-  filter(year %in% c("2017", "2018", "2019")) %>%
-  select(country, year, e_pop_num, e_mort_num) %>%
-  mutate(e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num)) %>%
-  select(-e_pop_num, -e_mort_num) %>%
-  mutate(
-    year = as.factor(year), 
-    e_mort_pro = as.numeric(e_mort_pro))
-
-
-ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Estimated proportions of death from TB in each country in 2017~2019") +
-  scale_y_continuous(name = "Proportion of deaths from TB")
+ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Paired") +
+ labs(x = "Countries", title = "Types of Usage funding in each country in 2018") +
+  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
-### Chart C
+### 2019
 
 ```{r}
-
+ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Paired") +
+ labs(x = "Countries", title = "Types of Usage funding in each country in 2019") +
+  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
 </code></pre>
