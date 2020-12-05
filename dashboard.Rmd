@@ -91,7 +91,7 @@ Column {data-width=650}
 -----------------------------------------------------------------------
 
 ### Types of Usage of funding in each country in 2017
-
+Most countries got funded for drugs to treat drug-susceptible TB (US Dollars)
 ```{r echo=FALSE, fig.width = 10, fig.height = 10}
 ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
@@ -105,7 +105,7 @@ Column {data-width=350}
 -----------------------------------------------------------------------
 
 ### Types of Usage of funding in each country in 2018
-
+The funding received for National TB Programme staff has increased than last year.
 ```{r echo=FALSE, fig.width = 10, fig.height = 10}
 ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
@@ -116,7 +116,7 @@ ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
 ```
 
 ### Types of Usage of funding in each country in 2019
-
+Funding received for all other budget line items was decreased.
 ```{r echo=FALSE, fig.width = 10, fig.height = 10}
 ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +

@@ -427,6 +427,7 @@ div.tocify {
 </div>
 <div id="exploratory-additional-analysis" class="section level1">
 <h1>Exploratory &amp; Additional Analysis</h1>
+<p>After we plot the density graph, we noticed it was heavily right skewed. So, doing a log transformation made the density look more normal. So doing a log linear regression will help to predict the average hospital stay in 2020.</p>
 <p>Based on transformation above, the model we are going to fit is: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other\]</span></p>
 <p>With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. We have included the interaction between <strong>patient</strong> and <strong>staff</strong> because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.</p>
 <p>However, with the country that we selected, there is not enough data to conduct multiple linear regression. So, we are going to use all the countries for accuracy. After conducting the linear regression, we can see that F-statistic is 911.8 with the p-value of less than 0.05. We also conducted the ANOVA test to see if the interaction variable is crucial or not. And the result was that it was significant.</p>
@@ -434,7 +435,7 @@ div.tocify {
 </div>
 <div id="findings-discussion" class="section level1">
 <h1>Findings &amp; Discussion</h1>
-<p>After the regression, the following regression is: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \]</span> <span class="math display">\[-130.83290021736 + 0.06694 year + 0.00000001176 patient  + 0.00000000155 staff \]</span> <span class="math display">\[+ 0.00000011595 programme -0.00000013128 drugs + -0.00000000898 other\]</span></p>
+<p>After the regression, the following regression is: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \]</span> <span class="math display">\[- 130.8329 + 0.06694 year + 0.00000001176 patient  + 0.00000000155 staff \]</span> <span class="math display">\[+ 0.0000001160 programme -0.00000013128 drugs + -0.00000000898 other\]</span></p>
 <p>So when pluggin the average funding for each variables, we are 95% confident that the in 2020, the average stay at the hospitals will fall between <strong>-0.3268</strong> and <strong>5.75</strong> days.</p>
 </div>
 

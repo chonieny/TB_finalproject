@@ -48,6 +48,8 @@ There are other types of usage funding, but we selected top 5 by taking the mean
 Our goal is to try find the multiple linear regression model using top 5 usage funding and predict future estimated average duration of stay. 
 
 # Exploratory & Additional Analysis
+After we plot the density graph, we noticed it was heavily right skewed. So, doing a log transformation made the density look more normal. So doing a log linear regression will help to predict the average hospital stay in 2020.
+
 Based on transformation above, the model we are going to fit is:
 $$log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other$$
 
@@ -64,6 +66,6 @@ Therefore, we can use these regression to predict average hospital stay in 2020.
 After the regression, the following regression is:
 $$log(average\ duration\ of\ stay\ for\ treatment) = $$
 $$- 130.8329 + 0.06694 year + 0.00000001176 patient  + 0.00000000155 staff $$
-$$+ 0.0000001160 programme -0.00000013128 drugs + -0.00000000898 other$$
+$$+ 0.0000001160 programme - 0.00000013128 drugs - 0.00000000898 other$$
 
 So when pluggin the average funding for each variables, we are  95% confident that the in 2020,  the average stay at the hospitals will fall between **-0.3268** and **5.75** days.
