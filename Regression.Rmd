@@ -124,26 +124,6 @@ TB_duration_2019 = TB_usage %>%
 
 TB_duration = inner_join(TB_duration_2017, TB_duration_2019)
 ```
-We can see that most of the country had the same or decreased estimated average duration of stay.
-```{r echo=FALSE, message=FALSE}
-TB_duration = inner_join(TB_duration_2017, TB_duration_2019)
-TB_duration_2017_2019 =  tidyr::gather(TB_duration, year, value, -country)
-TB_duration$country <- reorder(TB_duration$country, TB_duration$hospd_2019)
-TB_duration_2017_2019$country <- factor(TB_duration_2017_2019$country, levels = levels(TB_duration$country))
-
-ggplot(TB_duration, aes(y = country)) + 
-  geom_point(data = TB_duration_2017_2019, aes(x = value, color = year), size = 2) +
-  geom_dumbbell(aes(x = hospd_2017, xend = hospd_2019), size=3, color="#e3e2e1", 
-                colour_x = "red", colour_xend = "blue",
-                dot_guide=TRUE, dot_guide_size=0.25) +
-  theme_bw() +
-  scale_color_manual(name = "", values = c("red", "blue") ) +
-  labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
-       title = "Estimated average duration of stay if patients \n starting MDR-TB/XDR-TB
-       treatment are hospitalized (days)") +
-    theme(axis.text.y = element_text(angle = 45, vjust = 0.5, hjust = 1))
-
-```
 
 # Transformation and Assumption of the Normality 
 
