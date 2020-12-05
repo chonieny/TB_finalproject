@@ -119,39 +119,30 @@ TB_duration_2017 = TB_usage %>%
   mutate(hospd_2017 = hospd_mdr_dur) %>%
   select(country, hospd_2017)
 
-TB_duration_2018 = TB_usage %>%
-  filter(year == "2018") %>%
-  mutate(hospd_2018 = hospd_mdr_dur) %>%
-  select(country, hospd_2018)
-
 TB_duration_2019 = TB_usage %>%
   filter(year == "2019") %>%
   mutate(hospd_2019 = hospd_mdr_dur) %>%
   select(country, hospd_2019)
 
-TB_duration = full_join(inner_join(TB_duration_2017, TB_duration_2018), TB_duration_2019)
+TB_duration = inner_join(TB_duration_2017, TB_duration_2019)
 ```
 
 ```{r echo=FALSE, fig.width = 11, fig.height = 12}
-TB_duration = full_join(inner_join(TB_duration_2017, TB_duration_2018), TB_duration_2019)
+TB_duration = inner_join(TB_duration_2017, TB_duration_2019)
+TB_duration_2017_2019 =  tidyr::gather(TB_duration, year, value, -country)
+TB_duration$country <- reorder(TB_duration$country, TB_duration$hospd_2019)
+TB_duration_2017_2019$country <- factor(TB_duration_2017_2019$country, levels = levels(TB_duration$country))
 
-ggplot() +
-  geom_segment(data=TB_duration, aes(y = country, yend = country, x = 0, xend = .5), 
-               color = "#b2b2b2", size = 0.15) + 
-  geom_dumbbell(data = TB_duration, aes(y=country, x = hospd_2017, xend = hospd_2019),
-                size = 1.5, color = "#b2b2b2", size_x = 3, size_xend = 3, colour_x = "red",
-                colour_xend = "blue") +
+ggplot(TB_duration, aes(y = country)) + 
+  geom_point(data = TB_duration_2017_2019, aes(x = value, color = year), size = 2) +
+  geom_dumbbell(aes(x = hospd_2017, xend = hospd_2019), size=3, color="#e3e2e1", 
+                colour_x = "red", colour_xend = "blue",
+                dot_guide=TRUE, dot_guide_size=0.25) +
+  theme_bw() +
+  scale_color_manual(name = "", values = c("red", "blue") ) +
   labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
-       title = "Estimated average duration of hospital stay for patients starting MDR/XDR-TB
-       treatment") +
-  theme(axis.text.y = element_text(angle = 45, vjust = 0.5, hjust = 1))
-
-
-ggplot(data = TB_usage, aes(x = country, y = hospd_mdr_dur, fill = year)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
-       title = "Estimated average duration of hospital stay for patients starting MDR/XDR-TB
-       treatment") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1)) 
+       title = "Estimated average duration of stay if patients starting MDR-TB/XDR-TB
+       treatment are hospitalized (days)") +
+    theme(axis.text.y = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 

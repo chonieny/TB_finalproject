@@ -413,9 +413,24 @@ div.tocify {
 </div>
 <div id="data" class="section level1">
 <h1>Data</h1>
+<p>The main dataset for our project is made by World Health Organization. The dataset which consists types of usage funding has a range from 2017-2019.</p>
+<p>Variables that we are going to use are:</p>
+<ul>
+<li><strong>patient</strong>: Funding received for patient support (US Dollars)</li>
+<li><strong>staff</strong>: Funding received for National TB Programme staff (central unit staff and subnational TB staff) (US Dollars)</li>
+<li><strong>programme</strong>: Funding received for programme costs to treat drug-resistant TB (US Dollars)</li>
+<li><strong>drugs</strong>: Funding received for drugs to treat drug-susceptible TB (US Dollars)</li>
+<li><strong>other</strong>: Funding received for all other budget line items (US Dollars)</li>
+<li><strong>hospd_mdr_dur</strong>: Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</li>
+</ul>
+<p>There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them. Our goal is to try find the multiple linear regression model using top 5 usage funding and predict future estimated average duration of stay.</p>
 </div>
-<div id="exploratory-additional-analyses" class="section level1">
-<h1>Exploratory &amp; Additional Analyses</h1>
+<div id="exploratory-additional-analysis" class="section level1">
+<h1>Exploratory &amp; Additional Analysis</h1>
+<p>Based on transformation above, the model we are going to fit is: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other\]</span></p>
+<p>With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. We have included the interaction between <strong>patient</strong> and <strong>staff</strong> because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.</p>
+<p>However, with the country that we selected, there is not enough data to conduct multiple linear regression. So, we are going to use all the countries for accuracy. After conducting the linear regression, we can see that F-statistic is 911.8 with the p-value of less than 0.05. We also conducted the ANOVA test to see if the interaction variable is crucial or not. And the result was that it was significant.</p>
+<p>Therefore, we can use these regression to predict average hospital stay in 2020.</p>
 </div>
 <div id="findings-discussion" class="section level1">
 <h1>Findings &amp; Discussion</h1>

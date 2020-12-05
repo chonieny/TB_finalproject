@@ -248,4 +248,4 @@ newdata = data.frame(year = 2020, patient = 5601390, staff = 13714771, programme
 ```{r include=FALSE}
 predict(lm_model1, newdata, interval="predict")
 ```
-After putting the average funding for each variables, we are  95% confident that the in 2020,  wthe average stay at the hospitals will fall between -0.3268 and 5.75 days
+After putting the average funding for each variables, we are  95% confident that the in 2020,  the average stay at the hospitals will fall between **-0.3268** and **5.75** days

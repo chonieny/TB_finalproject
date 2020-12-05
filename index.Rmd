@@ -17,10 +17,12 @@ output:
 The source of our main datasets are from the World Health Organization. 
 They can be accessed [here](https://www.who.int/teams/global-tuberculosis-programme/data).
 
-## Website Overview
+## Analysis
 
 
 ## Findings
-
+After plugging the average funding for each variables, we are  95% confident that the in 2020, the people who started MDR-TB/XDR-TB treatment at hospital will fall between **-0.3268** and **5.75** days
 
 ## Contributors 
+Na Yun Cho (nc2894)
+Juyoung Hahm (jlh2270)
