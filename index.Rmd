@@ -9,15 +9,23 @@ output:
 
 <img src = "./TB.jpg" style = "width 75%">
 
-## Project Motivation
+## Screencast
 
+## Project Motivation
+According to CDC, TB infects more than 10 million people each year and is the leading infectious disease killer. In 2018, 1.7 billion people were infected by Tuberculosis bacteria, which is around 23% of the world's population. In addition, TB is becoming a more serious infectious disease as 
+approximately 20% of TB cases around the world are resistant to anti-TB drugs. This is problematic because treatments for such MDR-TB(multi-drug resistant TB) and XDR-TB(extensively drug resistant TB) cases are limited, often toxic, and expensive. Thus, we wanted to learn more about TB cases around the world and whether national fundings are related with TB mortality cases around the world. Moreover, given the threat of drug resistant TB cases, we wanted to look more into treatment statuses for MDR-TB and XDR-TB patients.
 
 ## Data used
 The source of our main datasets are from the World Health Organization. 
 They can be accessed [here](https://www.who.int/teams/global-tuberculosis-programme/data).
 
 ## Analysis
+With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized, and We used the top 5 usages of funding and year. We have also included the interaction between **patient** and **staff** because there could be a possible relationship that the funding for patient support and different national TB programme staffs can affect durations of hospital stay.
 
+However, with the countries that we selected, there was not enough significant data to conduct multiple linear regression.
+Thus, we haved used all the countries in the datasets for increased accuracy and significance. After conducting such linear regression including all countries, we could see that F-statistic is 911.8 with the p-value of less than 0.05.
+We also conducted the ANOVA test to see if the interaction variable is crucial or not, and the result showed that it is significant.
+Therefore, we can use this regression to predict the average length of hospital stay for MDR-TB and XDR-TB patients getting treatment in 2020.
 
 ## Findings
 After plugging the average funding for each variables, we are  95% confident that the in 2020, the people who started MDR-TB/XDR-TB treatment at hospital will fall between **-0.3268** and **5.75** days
@@ -25,5 +33,4 @@ After plugging the average funding for each variables, we are  95% confident tha
 ## Contributors 
 **Na Yun Cho (nc2894)**
 
-
-**Juyoung Hahm (jlh2270)**
+**Juyoung Hahm (jlh2270)** [Website](https://juyoung-hahm.github.io/HW4_jlh2270.github.io/)
