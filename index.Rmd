@@ -8,7 +8,7 @@ output:
 ---
 
 ## Where image will be
-<img src = "images/TB.jpg" style = "width 75%">
+<img src = "./TB.jpg" style = "width 75%">
 
 ## Project Motivation
 
