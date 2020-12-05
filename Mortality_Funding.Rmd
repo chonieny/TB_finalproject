@@ -89,7 +89,7 @@ animate(interactive_map,
 ```
 
 
-```{r echo = FALSE, message = FALSE, fig.width = 10, fig.height = 13}
+```{r echo = FALSE, message = FALSE, fig.width = 9, fig.height = 13}
 TB_burden = read.csv("./data/TB_burden_countries.csv")
 
 TB_mort =
@@ -112,7 +112,7 @@ p <- ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
 p + transition_reveal(year)
 ```
 
-```{r message = FALSE, echo = FALSE, fig.width = 10, fig.height = 13}
+```{r message = FALSE, echo = FALSE, fig.width = 9, fig.height = 13}
 TB_burden = read.csv("./data/TB_burden_countries.csv")
 
 TB_mort =
@@ -135,7 +135,7 @@ ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
   scale_y_continuous(name = "Proportion of deaths from TB")
 ```
 
-```{r message = FALSE, echo = FALSE, fig.width = 10, fig.height = 13}
+```{r message = FALSE, echo = FALSE, fig.width = 9, fig.height = 13}
 TB_funding = read.csv("./data/TB_expenditure_utilisation.csv")
 
 TB_tot_funding =

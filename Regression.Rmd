@@ -110,7 +110,7 @@ Variables used are:
 There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.
 
 
-```{r include=FALSE, fig.width = 10, fig.height = 10}
+```{r include=FALSE, fig.width = 9, fig.height = 10}
 TB_duration_2017 = TB_usage %>%
   filter(year == "2017") %>%
   mutate(hospd_2017 = hospd_mdr_dur) %>%

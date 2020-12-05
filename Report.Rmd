@@ -83,7 +83,11 @@ We also conducted the ANOVA test to see if the interaction variable is crucial o
 Therefore, we can use this regression to predict the average length of hospital stay for MDR-TB and XDR-TB patients getting treatment in 2020.
 
 # Findings & Discussion
-After the regression, the following regression is:
+From examining our exploratory analysis, we were able to find that the countries in our project have an overall decreasing trend in the estimated proportions of death from TB in 2000~2019. 
+India had the highest estimated number of deaths from TB throughout 2000 to 2019 and still remanis as so, but thankfully this number has been decreasing. <br/> From comparing the estimated number of death from TB in each country from 2017~2019 and the total funding received in these countries in these three years, we were not able to observe much distinguishing association. However, it was apparent that Timor-Leste, a country with the highest proportion of death from TB in 2017~2019, also was one of the countries with the lowest TB fundings received. In addition, Myanmar showed a decreasing trend in the estimated proportion of death from TB from 2017~2019 and showed a very slight increasing trend in the TB fundings received in these years. To more accurately assess these relationships, we can focus on these specific countries and run statistical analyses while including data from more years. <br/>
+Then, we looked into the top 5 areas that these TB fundings were used in each country, and noticed that funding received for National TB Programme staff was one of the highest areas that TB national fundings were allocated to in a lot of the countires. Across the countries analyzed, India had the highest amount of funding received from 2017~2019. 
+
+After conducting regression analyses, the regression model we found was:
 $$log(average\ duration\ of\ stay\ for\ treatment) = $$
 $$- 130.8329 + 0.06694 year + 0.00000001176 patient  + 0.00000000155 staff $$
 $$+ 0.0000001160 programme - 0.00000013128 drugs - 0.00000000898 other$$
