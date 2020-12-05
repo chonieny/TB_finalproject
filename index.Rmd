@@ -7,7 +7,6 @@ output:
     theme: cerulean
 ---
 
-## Where image will be
 <img src = "./TB.jpg" style = "width 75%">
 
 ## Project Motivation
