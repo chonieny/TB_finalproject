@@ -11,7 +11,7 @@
 
 
 
-<title>Website Title</title>
+<title>Relationship Between Tuberculosis and Funding in Asian Countries</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -388,35 +388,40 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Website Title</h1>
+<h1 class="title toc-ignore">Relationship Between Tuberculosis and Funding in Asian Countries</h1>
 
 </div>
 
 
 <p><img src = "TB.jpg" style = "width 75%"></p>
-<div id="screencast" class="section level2">
-<h2>Screencast</h2>
-</div>
 <div id="project-motivation" class="section level2">
 <h2>Project Motivation</h2>
-<p>According to CDC, TB infects more than 10 million people each year and is the leading infectious disease killer. In 2018, 1.7 billion people were infected by Tuberculosis bacteria, which is around 23% of the world’s population. In addition, TB is becoming a more serious infectious disease as approximately 20% of TB cases around the world are resistant to anti-TB drugs. This is problematic because treatments for such MDR-TB(multi-drug resistant TB) and XDR-TB(extensively drug resistant TB) cases are limited, often toxic, and expensive. Thus, we wanted to learn more about TB cases around the world and whether national fundings are related with TB mortality cases around the world. Moreover, given the threat of drug resistant TB cases, we wanted to look more into treatment statuses for MDR-TB and XDR-TB patients.</p>
+<p>According to CDC, TB infects more than 10 million people each year and is the leading infectious disease killer. In 2018, 1.7 billion people were infected by Tuberculosis bacteria, which is around 23% of the world’s population. In addition, TB is becoming a more serious infectious disease as approximately 20% of TB cases around the world are resistant to anti-TB drugs. This is problematic because treatments for such MDR-TB(multi-drug resistant TB) and XDR-TB(extensively drug resistant TB) cases are limited, often toxic, and expensive. Thus, we wanted to learn more about TB cases around the world, especially focusing on Asian countries, and whether national fundings are related with TB mortality cases in these countries. Moreover, given the threat of drug resistant TB cases, we wanted to look more into treatment statuses for MDR-TB and XDR-TB patients.</p>
 </div>
 <div id="data-used" class="section level2">
 <h2>Data used</h2>
 <p>The source of our main datasets are from the World Health Organization. They can be accessed <a href="https://www.who.int/teams/global-tuberculosis-programme/data">here</a>.</p>
 </div>
-<div id="analysis" class="section level2">
-<h2>Analysis</h2>
-<p>With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized, and We used the top 5 usages of funding and year. We have also included the interaction between <strong>patient</strong> and <strong>staff</strong> because there could be a possible relationship that the funding for patient support and different national TB programme staffs can affect durations of hospital stay.</p>
-<p>However, with the countries that we selected, there was not enough significant data to conduct multiple linear regression. Thus, we haved used all the countries in the datasets for increased accuracy and significance. After conducting such linear regression including all countries, we could see that F-statistic is 911.8 with the p-value of less than 0.05. We also conducted the ANOVA test to see if the interaction variable is crucial or not, and the result showed that it is significant. Therefore, we can use this regression to predict the average length of hospital stay for MDR-TB and XDR-TB patients getting treatment in 2020.</p>
+<div id="website-navigation" class="section level2">
+<h2>Website Navigation</h2>
+<ul>
+<li><strong>Mortality &amp; Funding</strong>: Interactive world map of estimated number of deaths from TB(2000~2019), TB mortality rates and TB fundings in different Asian countries(2000~2019)</li>
+<li><strong>Funding Usages</strong>: Graphs of top 5 funding usages in different Asian countries(2017~2019)</li>
+<li><strong>TB Hospitalization</strong>: Graphs of treatment data for MDR-TB and XDR-TB patients in different Asian countries(2000~2019)</li>
+<li><strong>Regression Analysis</strong>: Regression Analysis to predict the estimated average duration of hospital stay for MDR-TB and XDR-TB patients who are starting treatment</li>
+<li><strong>Report</strong>: Project report</li>
+</ul>
 </div>
-<div id="findings" class="section level2">
-<h2>Findings</h2>
-<p>After plugging the average funding for each variables, we are 95% confident that the in 2020, the people who started MDR-TB/XDR-TB treatment at hospital will fall between <strong>-0.3268</strong> and <strong>5.75</strong> days</p>
+<div id="video-introduction" class="section level2">
+<h2>Video Introduction</h2>
+</div>
+<div id="prediction" class="section level2">
+<h2>Prediction</h2>
+<p>With regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We are 95% confident that the in 2020, the average duration of hospital stay for patients who started MDR-TB/XDR-TB treatment will fall between <strong>-0.3268</strong> and <strong>5.75</strong> days</p>
 </div>
 <div id="contributors" class="section level2">
 <h2>Contributors</h2>
-<p><strong>Na Yun Cho (nc2894)</strong></p>
+<p><strong>Na Yun Cho (nc2894)</strong> <a href="https://chonieny.github.io/">Website</a></p>
 <p><strong>Juyoung Hahm (jlh2270)</strong> <a href="https://juyoung-hahm.github.io/HW4_jlh2270.github.io/">Website</a></p>
 </div>
 
