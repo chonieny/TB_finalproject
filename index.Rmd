@@ -26,6 +26,8 @@ They can be accessed [here](https://www.who.int/teams/global-tuberculosis-progra
 
 ## Video Introduction
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/EvDPb_bb8A4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Prediction
 With regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We are 95% confident that the in 2020, the average duration of hospital stay for patients who started MDR-TB/XDR-TB treatment will fall between **-0.3268** and **5.75** days
 
