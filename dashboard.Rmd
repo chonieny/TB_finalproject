@@ -4,10 +4,10 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
-    source: embed
 ---
 
-```{r include = FALSE}
+```{r setup, include=FALSE}
+library(flexdashboard)
 TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
 library(flexdashboard)
 library(tidyverse)
@@ -27,9 +27,6 @@ options(
 )
 scale_colour_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
-```
-
-```{r tidy data, include = FALSE}
 table(TB_usage$g_whoregion) #We will use WPR(Western Pacific) , SEA(South East Asia)
 TB_usage = TB_usage %>%
   select(
@@ -54,9 +51,6 @@ TB_usage = TB_usage %>%
 
 TB_usage = TB_usage[TB_usage$country %in% names(which(table(TB_usage$country) > 2)), ] 
 #remove the data that doesn't have 2017,2018,2019
-```
-
-```{r Variable:Types of Usage funding in each country in 2017-2019, include=FALSE}
 unique(TB_usage$country)
 colSums(TB_usage == 0)
 
@@ -82,37 +76,41 @@ usage_2019_top5 = TB_usage %>%
   melt(id.vars = 'country', variable.name = 'usage_type')
 ```
 
-
-{data-width=650}
+Column {data-width=650}
 -----------------------------------------------------------------------
 
-```{r echo = FALSE, message = FALSE}
+### Types of Usage of funding in each country in 2017
+
+```{r}
 ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Paired") +
- labs(x = "Countries", title = "Types of Usage funding in each country in 2017") +
+ labs(x = "Countries") +
   scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
-{data-width=350}
+Column {data-width=350}
 -----------------------------------------------------------------------
 
-```{r echo = FALSE, message = FALSE}
+### Types of Usage funding in each country in 2018
+
+```{r}
 ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Paired") +
- labs(x = "Countries", title = "Types of Usage funding in each country in 2018") +
+ labs(x = "Countries") +
   scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
+### Types of Usage funding in each country in 2019
 
-```{r echo = FALSE, message = FALSE}
+```{r}
 ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Paired") +
- labs(x = "Countries", title = "Types of Usage funding in each country in 2019") +
+ labs(x = "Countries") +
   scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
