@@ -66,7 +66,7 @@ Question: What are the estimated number of deaths from TB around the world from 
 ### Funding Usages
 Question: What are the top 5 areas that the national TB fundings received were allocated to in each country in each year from 2017~2019? Are there any trends per country and across the countries? Do these trends seem to change over the years? 
 
-### TB Hospitalization
+### TB Hospitalization 
 Question: What were the number of MDR-TB and XDR-TB patients who completed treatment or were cured in the last 19 years? Are there any trends? <br/>
 : What were the estimated duration of stay if these patients starting treatment were hospitalized in 2017~2019? Are there any relationships between the number of these patients who completed treatment and the estimated duration of hospital stay for these patients receiving treatment? 
 
@@ -87,7 +87,7 @@ Therefore, we can use this regression to predict the average length of hospital 
 India had the highest estimated number of deaths from TB in the world throughout 2000 to 2019 and still remanis as so, but thankfully this number has been decreasing. <br/>    From comparing the estimated number of death from TB in each country from 2017~2019 and the total funding received in these countries in these three years, we were not able to observe much noticeable association. However, it was apparent that Timor-Leste, a country with the highest proportion of death from TB in 2017~2019, was also one of the countries with the lowest TB fundings received. In addition, Myanmar showed a decreasing trend in the estimated proportion of death from TB from 2017~2019 and showed a very slight increasing trend in the TB fundings received in these years. To more accurately assess these relationships, we can potentially focus on these specific countries and run statistical analyses while including data from more years. <br/>
   Then, we looked into the top 5 areas that these TB fundings were used in each country, and noticed that funding received for National TB Programme staff was one of the highest areas that TB national fundings were allocated to in a lot of the countires. Across the countries analyzed, India had the highest amount of funding received from 2017~2019. As India is one of the top leading countries of TB cases, we can guess that the country puts more funding efforts into treating and preventing TB. More specifically, the proportion of funding towards TB patient support seemed to have increased in India from 2017 to 2019. <br/>
   Examining the animated graph that shows the number of MDR-TB and XDR-TB patients who completed treatments or were cured, we could find that there is a noticeable big increase in the number in Cambodia from 2000 to 2019. For the other Asian countries analyzed, there was not an significant increase over the years, but the trends generally seemed to gradually increase over the years. Furthermore, looking into the average duration of hospital stay in MDR and XDR-TB patients in 2017 and 2019, most countries had very similar average duration of hospital stay in these two years. However, the average duration of hospital stay for these patients in Timor-Leste was much higher in 2017 than in 2019. <br/>
-Lastly, from our regression analyses, the regression model we found was:
+Lastly, from our regression analyses, the regression model we found is:
 $$log(average\ duration\ of\ stay\ for\ treatment) = $$
 $$- 130.8329 + 0.06694 year + 0.00000001176 patient  + 0.00000000155 staff $$
 $$+ 0.0000001160 programme - 0.00000013128 drugs - 0.00000000898 other$$
