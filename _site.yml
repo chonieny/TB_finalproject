@@ -5,10 +5,10 @@ navbar:
   right:
     - text: "Mortality & Funding"
       href: Mortality_Funding.html
-    - text: "TB Hospitalization"
-      href: Mortality.html
     - text: "Funding Usages"
       href: dashboard.html
+    - text: "TB Hospitalization"
+      href: Mortality.html
     - text: "Regression Analysis"
       href: Regression.html
     - text: "Interactive Map"
