@@ -396,30 +396,6 @@ div.tocify {
 </div>
 
 
-<pre class="r"><code>TB_outcomes = read.csv(&quot;./data/TB_outcomes.csv&quot;)
-TB_usage = read.csv(&quot;./data/TB_expenditure_utilisation.csv&quot;)
-
-TB_success = 
-  TB_outcomes %&gt;%
-  filter(country %in% c(&quot;Bangladesh&quot;, &quot;Cambodia&quot;, &quot;India&quot;, &quot;Indonesia&quot;, &quot;Lao People&#39;s Democratic Republic&quot;,
-                        &quot;Mongolia&quot;, &quot;Myanmar&quot;, &quot;Nepal&quot;, &quot;Solomon Islands&quot;, &quot;Thailand&quot;, &quot;Timor-Leste&quot;)) %&gt;%
-  select(country, year, mdr_succ, xdr_succ) %&gt;%
-  na.omit(mdr_success) %&gt;%
-  na.omit(xdr_success) %&gt;%
-  mutate(mdr_xdr_success = as.numeric(mdr_succ) + as.numeric(xdr_succ)) %&gt;%
-  select(-mdr_succ, -xdr_succ) %&gt;%
-  mutate(
-    year = as.integer(year), 
-    mdr_xdr_success = as.integer(mdr_xdr_success))
-  
-p &lt;- ggplot(data = TB_success, aes(x = year, y = mdr_xdr_success, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = &quot;Year&quot;, title = &quot;Number of MDR-TB and XDR-TB patients who completed treatments or were cured&quot;) +
-  scale_y_continuous(name = &quot;Number of patients&quot;) +
-  theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
-
-p + transition_reveal(year)</code></pre>
 <p><img src="Mortality_files/figure-html/unnamed-chunk-2-1.gif" width="90%" /></p>
 <div id="estimated-average-duration-of-stay-if-patients-starting-mdr-tbxdr-tb-treatment-are-hospitalized-days" class="section level1">
 <h1>Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</h1>

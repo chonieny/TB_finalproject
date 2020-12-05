@@ -396,84 +396,8 @@ div.tocify {
 </div>
 
 
-<pre class="r"><code>library(tidyverse)
-library(dplyr)
-library(ggplot2)
-library(reshape2)
-library(gganimate)
-library(htmlwidgets)
-knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.asp = .6,
-  out.width = &quot;90%&quot;
-)
-theme_set(theme_minimal() + theme(legend.position = &quot;bottom&quot;))
-options(
-  ggplot2.continuous.colour = &quot;viridis&quot;,
-  ggplot2.continuous.fill = &quot;viridis&quot;
-)
-scale_colour_discrete = scale_color_viridis_d
-scale_fill_discrete = scale_fill_viridis_d</code></pre>
-<pre class="r"><code>TB_burden = read.csv(&quot;./data/TB_burden_countries.csv&quot;)
-
-TB_mort =
-  TB_burden %&gt;%
-  filter(country %in% c(&quot;Bangladesh&quot;, &quot;Cambodia&quot;, &quot;India&quot;, &quot;Indonesia&quot;, &quot;Lao People&#39;s Democratic Republic&quot;,
-                        &quot;Mongolia&quot;, &quot;Myanmar&quot;, &quot;Nepal&quot;, &quot;Solomon Islands&quot;, &quot;Thailand&quot;, &quot;Timor-Leste&quot;)) %&gt;%
-  select(country, year, e_pop_num, e_mort_num) %&gt;%
-  mutate(e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num)) %&gt;%
-  select(-e_pop_num, -e_mort_num) %&gt;%
-  mutate(
-    year = as.numeric(year), 
-    e_mort_pro = as.numeric(e_mort_pro))
-
-p &lt;- ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = &quot;Year&quot;, title = &quot;Estimated proportions of death from TB in each country in 2000~2019&quot;) +
-  scale_y_continuous(name = &quot;Proportion of deaths from TB&quot;) +
-  theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
-p + transition_reveal(year)</code></pre>
 <p><img src="Mortality_Funding_files/figure-html/unnamed-chunk-2-1.gif" width="90%" /></p>
-<pre class="r"><code>TB_burden = read.csv(&quot;./data/TB_burden_countries.csv&quot;)
-
-TB_mort =
-  TB_burden %&gt;%
-  filter(country %in% c(&quot;Bangladesh&quot;, &quot;Cambodia&quot;, &quot;India&quot;, &quot;Indonesia&quot;, &quot;Lao People&#39;s Democratic Republic&quot;,
-                        &quot;Mongolia&quot;, &quot;Myanmar&quot;, &quot;Nepal&quot;, &quot;Solomon Islands&quot;, &quot;Thailand&quot;, &quot;Timor-Leste&quot;)) %&gt;%
-  filter(year %in% c(&quot;2017&quot;, &quot;2018&quot;, &quot;2019&quot;)) %&gt;%
-  select(country, year, e_pop_num, e_mort_num) %&gt;%
-  mutate(e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num)) %&gt;%
-  select(-e_pop_num, -e_mort_num) %&gt;%
-  mutate(
-    year = as.factor(year), 
-    e_mort_pro = as.numeric(e_mort_pro))
-
-
-ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = &quot;Year&quot;, title = &quot;Estimated proportions of death from TB in each country in 2017~2019&quot;) +
-  scale_y_continuous(name = &quot;Proportion of deaths from TB&quot;)</code></pre>
 <p><img src="Mortality_Funding_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
-<pre class="r"><code>TB_funding = read.csv(&quot;./data/TB_expenditure_utilisation.csv&quot;)
-
-TB_tot_funding =
-  TB_funding %&gt;%
-  filter(country %in% c(&quot;Bangladesh&quot;, &quot;Cambodia&quot;, &quot;India&quot;, &quot;Indonesia&quot;, &quot;Lao People&#39;s Democratic Republic&quot;,
-                        &quot;Mongolia&quot;, &quot;Myanmar&quot;, &quot;Nepal&quot;, &quot;Solomon Islands&quot;, &quot;Thailand&quot;, &quot;Timor-Leste&quot;)) %&gt;%
-  select(country, year, rcvd_tot_sources) %&gt;%
-  rename(funding = rcvd_tot_sources) %&gt;%
-  mutate(
-    year = as.factor(year), 
-    funding = as.numeric(funding))
-
-
-ggplot(data = TB_tot_funding, aes(x = year, y = funding, group = country)) +
-  geom_line(aes(color = country)) +
-  geom_point(aes(color = country)) +
-  labs(x = &quot;Year&quot;, title = &quot;Total funding received in each country in 2017~2019&quot;) +
-  scale_y_continuous(name = &quot;Funding ($)&quot;, labels = scales::comma)</code></pre>
 <p><img src="Mortality_Funding_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
 
 

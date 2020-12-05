@@ -31,7 +31,7 @@ scale_fill_discrete = scale_fill_viridis_d
 ```
 
 
-```{r}
+```{r message = FALSE, echo = FALSE}
 TB_outcomes = read.csv("./data/TB_outcomes.csv")
 TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
 

@@ -88,7 +88,7 @@ Column {data-width=650}
 
 ### 2017
 
-```{r}
+```{r echo = FALSE, message = FALSE}
 ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Paired") +
@@ -102,7 +102,7 @@ Column {data-width=350}
 
 ### 2018
 
-```{r}
+```{r echo = FALSE, message = FALSE}
 ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Paired") +
@@ -113,7 +113,7 @@ ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
 
 ### 2019
 
-```{r}
+```{r echo = FALSE, message = FALSE}
 ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Paired") +

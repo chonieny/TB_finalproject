@@ -7,7 +7,7 @@ output:
     theme: cerulean
 ---
 
-```{r}
+```{r include = FALSE}
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
@@ -28,7 +28,7 @@ scale_colour_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-```{r}
+```{r echo = FALSE, message = FALSE}
 TB_burden = read.csv("./data/TB_burden_countries.csv")
 
 TB_mort =
@@ -51,7 +51,7 @@ p <- ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
 p + transition_reveal(year)
 ```
 
-```{r}
+```{r message = FALSE, echo = FALSE}
 TB_burden = read.csv("./data/TB_burden_countries.csv")
 
 TB_mort =
@@ -74,7 +74,7 @@ ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
   scale_y_continuous(name = "Proportion of deaths from TB")
 ```
 
-```{r}
+```{r message = FALSE, echo = FALSE}
 TB_funding = read.csv("./data/TB_expenditure_utilisation.csv")
 
 TB_tot_funding =
