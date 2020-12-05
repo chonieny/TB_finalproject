@@ -9,7 +9,7 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
-TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
+TB_usage2 = read.csv("./data/TB_expenditure_utilisation.csv")
 library(flexdashboard)
 library(tidyverse)
 library(dplyr)
@@ -28,8 +28,11 @@ options(
 )
 scale_colour_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
-table(TB_usage$g_whoregion) #We will use WPR(Western Pacific) , SEA(South East Asia)
-TB_usage = TB_usage %>%
+
+TB_usage2 = read.csv("./data/TB_expenditure_utilisation.csv")
+
+table(TB_usage2$g_whoregion) #We will use WPR(Western Pacific) , SEA(South East Asia)
+TB_usage2 = TB_usage2 %>%
   select(
     country, year, g_whoregion,hospd_mdr_dur,
     rcvd_fld, rcvd_lab, rcvd_mdrmgt, rcvd_orsrvy, rcvd_oth, rcvd_patsup, 
@@ -38,42 +41,49 @@ TB_usage = TB_usage %>%
   filter(
     g_whoregion == "WPR" | g_whoregion == "SEA"
   ) %>%
-  select(-g_whoregion)
+  select(-g_whoregion) %>%
+  rename(
+    patient = rcvd_patsup,
+    staff = rcvd_staff,
+    programme = rcvd_mdrmgt,
+    drugs = rcvd_fld,
+    other = rcvd_oth
+  )
 
-colSums(is.na(TB_usage)) #remove rcvd_tpt because there are many NAs.
+colSums(is.na(TB_usage2)) #remove rcvd_tpt because there are many NAs.
 
-TB_usage = TB_usage %>% 
+TB_usage2 = TB_usage2 %>% 
   select(-rcvd_tpt) 
 
-colSums(is.na(TB_usage))
+colSums(is.na(TB_usage2))
 
-TB_usage = TB_usage %>%
-  na.omit(rcvd_fld)
+TB_usage2 = TB_usage2 %>%
+  na.omit(drugs)
 
-TB_usage = TB_usage[TB_usage$country %in% names(which(table(TB_usage$country) > 2)), ] 
+TB_usage2 = TB_usage2[TB_usage2$country %in% names(which(table(TB_usage2$country) > 2)), ] 
 #remove the data that doesn't have 2017,2018,2019
-unique(TB_usage$country)
-colSums(TB_usage == 0)
+unique(TB_usage2$country)
+colSums(TB_usage2 == 0)
 
-TB_usage %>%
+TB_usage2 %>%
   select(-country, -year) %>%
   colMeans() %>%
   order() 
-#top 5 usage type of fundings are: rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth
+#top 5 usage type of fundings are: patient, staff, programme, drugs, other
 
-usage_2017_top5 = TB_usage %>% 
+usage_2017_top5 = TB_usage2 %>% 
   filter(year == "2017") %>%
-  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  select(country, patient, staff, programme, drugs, other) %>%
   melt(id.vars = 'country', variable.name = 'usage_type')
 
-usage_2018_top5 = TB_usage %>% 
+usage_2018_top5 = TB_usage2 %>% 
   filter(year == "2018") %>%
-  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  select(country, patient, staff, programme, drugs, other) %>%
   melt(id.vars = 'country', variable.name = 'usage_type')
 
-usage_2019_top5 = TB_usage %>% 
+usage_2019_top5 = TB_usage2 %>% 
   filter(year == "2019") %>%
-  select(country, rcvd_patsup, rcvd_staff, rcvd_mdrmgt, rcvd_fld, rcvd_oth) %>%
+  select(country, patient, staff, programme, drugs, other) %>%
   melt(id.vars = 'country', variable.name = 'usage_type')
 ```
 
@@ -82,7 +92,7 @@ Column {data-width=650}
 
 ### Types of Usage of funding in each country in 2017
 
-```{r}
+```{r echo=FALSE, fig.width = 10, fig.height = 10}
 ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Paired") +
@@ -96,7 +106,7 @@ Column {data-width=350}
 
 ### Types of Usage of funding in each country in 2018
 
-```{r}
+```{r echo=FALSE, fig.width = 10, fig.height = 10}
 ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Paired") +
@@ -107,7 +117,7 @@ ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
 
 ### Types of Usage of funding in each country in 2019
 
-```{r}
+```{r echo=FALSE, fig.width = 10, fig.height = 10}
 ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +
   geom_bar(stat = "identity") +
   scale_fill_brewer(palette = "Paired") +

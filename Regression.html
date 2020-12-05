@@ -396,11 +396,11 @@ div.tocify {
 <p>The main dataset for our project is made by World Health Organization. It can be access at <a href="https://www.who.int/teams/global-tuberculosis-programme/data">here</a>. The dataset which consists types of usage funding has a range from 2017-2019, and other datset that consists estimated mortality of TB cases has a range of 2000 to 2019. To make the data consistent, we will use the data from 2017 to 2019.</p>
 <p>Variables that we are going to use are:</p>
 <ul>
-<li><strong>rcvd_patsup</strong>: Funding received for patient support (US Dollars)</li>
-<li><strong>rcvd_staff</strong>: Funding received for National TB Programme staff (central unit staff and subnational TB staff) (US Dollars)</li>
-<li><strong>rcvd_mdrmgt</strong>:Funding received for programme costs to treat drug-resistant TB (US Dollars)</li>
-<li><strong>rcvd_fld</strong>:Funding received for drugs to treat drug-susceptible TB (US Dollars)</li>
-<li><strong>rcvd_oth</strong>:Funding received for all other budget line items (US Dollars)</li>
+<li><strong>patient</strong>: Funding received for patient support (US Dollars)</li>
+<li><strong>staff</strong>: Funding received for National TB Programme staff (central unit staff and subnational TB staff) (US Dollars)</li>
+<li><strong>programme</strong>:Funding received for programme costs to treat drug-resistant TB (US Dollars)</li>
+<li><strong>drugs</strong>:Funding received for drugs to treat drug-susceptible TB (US Dollars)</li>
+<li><strong>other</strong>:Funding received for all other budget line items (US Dollars)</li>
 <li><strong>hospd_mdr_dur</strong>: Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</li>
 </ul>
 <p>There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them. # Regression Analysis ## Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</p>
@@ -413,27 +413,27 @@ div.tocify {
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
-<p>With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. We have included the interaction between <strong>rcvd_patsup</strong> and <strong>rcvd_staff</strong> because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.</p>
+<p>With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. We have included the interaction between <strong>patient</strong> and <strong>staff</strong> because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.</p>
 <p>Based on transformation above, the model we are going to fit is: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other\]</span></p>
 <pre><code>## 
 ## Call:
-## lm(formula = log_hosp ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + 
-##     rcvd_fld + rcvd_oth + rcvd_patsup * rcvd_staff, data = TB_usage)
+## lm(formula = log_hosp ~ year + patient + staff + programme + 
+##     drugs + other + patient * staff, data = TB_usage)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
 ## -1.64502 -0.61025  0.03948  0.50141  1.85246 
 ## 
 ## Coefficients:
-##                          Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)            -1.587e+01  5.345e+02  -0.030   0.9766  
-## year                    1.005e-02  2.649e-01   0.038   0.9701  
-## rcvd_patsup            -1.894e-07  1.690e-07  -1.121   0.2743  
-## rcvd_staff             -1.835e-08  4.104e-08  -0.447   0.6592  
-## rcvd_mdrmgt             1.143e-07  5.578e-08   2.049   0.0526 .
-## rcvd_fld               -1.018e-07  5.318e-08  -1.915   0.0686 .
-## rcvd_oth               -1.100e-08  3.058e-08  -0.360   0.7225  
-## rcvd_patsup:rcvd_staff  2.285e-15  1.898e-15   1.204   0.2415  
+##                 Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)   -1.587e+01  5.345e+02  -0.030   0.9766  
+## year           1.005e-02  2.649e-01   0.038   0.9701  
+## patient       -1.894e-07  1.690e-07  -1.121   0.2743  
+## staff         -1.835e-08  4.104e-08  -0.447   0.6592  
+## programme      1.143e-07  5.578e-08   2.049   0.0526 .
+## drugs         -1.018e-07  5.318e-08  -1.915   0.0686 .
+## other         -1.100e-08  3.058e-08  -0.360   0.7225  
+## patient:staff  2.285e-15  1.898e-15   1.204   0.2415  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
@@ -441,12 +441,12 @@ div.tocify {
 ## Multiple R-squared:  0.4937, Adjusted R-squared:  0.3326 
 ## F-statistic: 3.065 on 7 and 22 DF,  p-value: 0.02071</code></pre>
 <p>Based on the summary, we can see that some of our main effects are not significant due to small data. ## All Countries So, we are going to look at all the countries’ data and find the multiple linear regression.</p>
-<p>Looking at the regression model for all countries, all variables are significant but the interaction between <strong>rcvd_patsup</strong> and <strong>rcvd_staff</strong> is not significant. Below is the ANOVA Test and we can conclude that since the pvalue is bigger than 0.05, the bigger model is not significant.</p>
+<p>Looking at the regression model for all countries, all variables are significant but the interaction between <strong>patient</strong> and <strong>staff</strong> is not significant. Below is the ANOVA Test and we can conclude that since the pvalue is bigger than 0.05, the bigger model is not significant.</p>
 <pre class="r"><code>summary(all_lm_model2)</code></pre>
 <pre><code>## 
 ## Call:
-## lm(formula = log_hosp ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + 
-##     rcvd_fld + rcvd_oth, data = TB_regression)
+## lm(formula = log_hosp ~ year + patient + staff + programme + 
+##     drugs + other, data = TB_regression)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
@@ -456,11 +456,11 @@ div.tocify {
 ##               Estimate Std. Error t value Pr(&gt;|t|)    
 ## (Intercept) -1.308e+02  3.180e+01  -4.114 3.94e-05 ***
 ## year         6.694e-02  1.576e-02   4.248 2.19e-05 ***
-## rcvd_patsup  1.176e-08  1.488e-09   7.905 3.14e-15 ***
-## rcvd_staff   1.547e-09  2.272e-09   0.681    0.496    
-## rcvd_mdrmgt  1.159e-07  3.372e-09  34.385  &lt; 2e-16 ***
-## rcvd_fld    -1.313e-07  2.855e-09 -45.978  &lt; 2e-16 ***
-## rcvd_oth    -8.979e-09  1.846e-09  -4.864 1.18e-06 ***
+## patient      1.176e-08  1.488e-09   7.905 3.14e-15 ***
+## staff        1.547e-09  2.272e-09   0.681    0.496    
+## programme    1.159e-07  3.372e-09  34.385  &lt; 2e-16 ***
+## drugs       -1.313e-07  2.855e-09 -45.978  &lt; 2e-16 ***
+## other       -8.979e-09  1.846e-09  -4.864 1.18e-06 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
@@ -470,10 +470,9 @@ div.tocify {
 <pre class="r"><code>anova(all_lm_model1,all_lm_model2)</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
-## Model 1: log_hosp ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + 
-##     rcvd_oth + rcvd_patsup * rcvd_staff
-## Model 2: log_hosp ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + 
-##     rcvd_oth
+## Model 1: log_hosp ~ year + patient + staff + programme + drugs + other + 
+##     patient * staff
+## Model 2: log_hosp ~ year + patient + staff + programme + drugs + other
 ##   Res.Df    RSS Df Sum of Sq     F    Pr(&gt;F)    
 ## 1   6412 5705.2                                 
 ## 2   6413 6080.9 -1   -375.66 422.2 &lt; 2.2e-16 ***
@@ -483,7 +482,6 @@ div.tocify {
 <div id="prediction" class="section level1">
 <h1>Prediction</h1>
 <p>Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days) in 2020:</p>
-<pre recho="FALSE"><code>predict(lm_model1, newdata, interval=&quot;predict&quot;)</code></pre>
 <p>After putting the average funding for each variables, we are 95% confident that the in 2020, wthe average stay at the hospitals will fall between -0.3268 and 5.75 days</p>
 </div>
 
