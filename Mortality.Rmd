@@ -31,7 +31,7 @@ scale_fill_discrete = scale_fill_viridis_d
 ```
 
 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE, echo = FALSE, fig.width = 11, fig.height = 12}
 TB_outcomes = read.csv("./data/TB_outcomes.csv")
 TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
 
@@ -51,7 +51,7 @@ TB_success =
 p <- ggplot(data = TB_success, aes(x = year, y = mdr_xdr_success, group = country)) +
   geom_line(aes(color = country)) +
   geom_point(aes(color = country)) +
-  labs(x = "Year", title = "Number of MDR-TB and XDR-TB patients who completed treatments or were cured") +
+  labs(x = "Year", title = "Number of MDR,XDR-TB patients who completed treatments/cured") +
   scale_y_continuous(name = "Number of patients") +
   theme(axis.text.x = element_text(angle = 270, vjust = 0.5, hjust = 1))
 
@@ -132,7 +132,7 @@ TB_duration_2019 = TB_usage %>%
 TB_duration = full_join(inner_join(TB_duration_2017, TB_duration_2018), TB_duration_2019)
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.width = 11, fig.height = 12}
 TB_duration = full_join(inner_join(TB_duration_2017, TB_duration_2018), TB_duration_2019)
 
 ggplot() +
@@ -142,16 +142,16 @@ ggplot() +
                 size = 1.5, color = "#b2b2b2", size_x = 3, size_xend = 3, colour_x = "red",
                 colour_xend = "blue") +
   labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
-       title = "Estimated average duration of stay if patients starting MDR-TB/XDR-TB
-       treatment are hospitalized (days)") +
+       title = "Estimated average duration of hospital stay for patients starting MDR/XDR-TB
+       treatment") +
   theme(axis.text.y = element_text(angle = 45, vjust = 0.5, hjust = 1))
 
 
 ggplot(data = TB_usage, aes(x = country, y = hospd_mdr_dur, fill = year)) +
   geom_bar(stat = "identity") +
   labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
-       title = "Estimated average duration of stay if patients starting MDR-TB/XDR-TB
-       treatment are hospitalized (days)") +
+       title = "Estimated average duration of hospital stay for patients starting MDR/XDR-TB
+       treatment") +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1)) 
 ```
 

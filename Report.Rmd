@@ -9,14 +9,31 @@ output:
 
 # Motivation
 
-content 
-* 1.7 billion people were infected by Tuberculosis bacteria in 2018, which is around 23% of the world's population 
-* TB still infects more than 10 million people each year and is the leading infectious disease killer
-* Approximately 20% of TB cases around the world are resistant to anti-TB drugs, which is problematic because treatments are limited, often toxic, and expensive
-* Out of the 10 million people who were sick with TB in 2018, around 3 million could not get proper care by their health systems 
+According to CDC, TB infects more than 10 million people each year and is the leading infectious disease killer. In 2018, 1.7 billion people were infected by Tuberculosis bacteria, which is around 23% of the world's population. In addition, TB is becoming a more serious infectious disease as 
+approximately 20% of TB cases around the world are resistant to anti-TB drugs. This is problematic because treatments for such MDR-TB(multi-drug resistant TB) and XDR-TB(extensively drug resistant TB) cases are limited, often toxic, and expensive. Thus, we wanted to learn more about TB cases around the world and whether national fundings are related with TB mortality cases around the world. Moreover, given the threat of drug resistant TB cases, we wanted to look more into treatment statuses for MDR-TB and XDR-TB patients. 
+
 
 # Related work
 
 The following resources are some of the inspirations of this project. 
 
-* [CDC MDR TB](https://www.cdc.gov/tb/publications/factsheets/drtb/mdrtb.htm)
+* [CDC MDR-TB](https://www.cdc.gov/tb/publications/factsheets/drtb/mdrtb.htm)
+
+* [US Government and Global Tuberculosis Efforts](https://www.kff.org/global-health-policy/fact-sheet/the-u-s-government-and-global-tuberculosis-efforts/)
+
+* [Report Warns of rise in Drug-resistant Tuberculosis](https://www.cidrap.umn.edu/news-perspective/2017/03/report-warns-rise-drug-resistant-tuberculosis)
+
+* [Tuberculosis: A Global Health Problem](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2980871/pdf/jhpn0028-0111.pdf)
+
+
+# Questions throughout the project
+
+Our main questions were constant throughout the project, but some additional questions arose in the course of our data analyses. Initially, we intended to examine TB mortality rates across countries in all continents from 2000 to 2019, but due to lack of pertinent data, we focused on examining TB mortality rates in 11 specific countries in the Asia region. In these countries, we were curious if total national TB funding received in the last three years have had any association with the TB mortality rates in these last three years. Naturally, we also wanted to learn more about the usages of these fundings in each country. 
+Not only that, one of our initial areas of interest was examining around how many MDR-TB and XDR-TB patients complete successful treatment each year. So, we wanted to do so for the years from 2000 to 2019 for the countries that we have selected. After noticing that the number of such patients seem to have been slightly increasing in recent years, we were curious if the average duration of stay in hospitals for such patients show any trends in recent years. 
+After doing so, we became more interested in performing some regression analysis to see if the average duration of stay in hospitals for these patients can be predicted by various types of TB fundings. This is a slight change from our initial intent of performing regression analysis on TB fundings with TB mortality rates, since this regression did not seem to be statistically significant and also seemed quite broad of a relationship. Thus, we decided to focus more on examining and predicting the relationship between average duration of hospital stay for MDR-TB and XDR-TB patients and various types of national TB fundings. 
+
+# Data
+
+# Exploratory & Additional Analyses
+
+# Findings & Discussion
