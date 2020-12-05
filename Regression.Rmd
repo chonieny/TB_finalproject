@@ -6,7 +6,12 @@ output:
     toc_float: true
     theme: cerulean
 ---
+<style>
+.nav-pills>li:nth-child(2) {
+    background: green;
+ }
 ```{r include=FALSE}
+
 library(tidyverse)
 library(dplyr)
 library(ggplot2)
