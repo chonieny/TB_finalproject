@@ -93,125 +93,127 @@ Variables that we are going to use are:
 * **rcvd_mdrmgt**:Funding received for programme costs to treat drug-resistant TB (US Dollars)
 * **rcvd_fld**:Funding received for drugs to treat drug-susceptible TB (US Dollars)
 * **rcvd_oth**:Funding received for all other budget line items (US Dollars)
+* **hospd_mdr_dur**: Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
 
-* **e_mort_num**: Estimated number of deaths from TB (all forms)
-* **e_pop_num**: Estimated total population number
-
-
-To be more accurate, we will make a new variable called **e_mort_pro_100k**, a proportion of estimated proportion of death from TB by dividing  the estimated number of deaths from TB(**e_mort_num**) by estimated total population number(**e_pop_num**) and multiply by 100,000.
 
 There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.
 
+# Type of Usage Funding in Each Country
+## 2017
+Most countries got funded for drugs to treat drug-susceptible TB (US Dollars)
+```{r echo=FALSE, fig.width = 12, fig.height = 12}
+ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Paired") +
+ labs(x = "Countries", title = "Types of Usage funding in each country in 2017") +
+  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
+```
 
-```{r include=FALSE}
+## 2018
+The funding received for National TB Programme staff has increased than last year.
+```{r echo=FALSE, fig.width = 8, fig.height = 10}
+ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Paired") +
+ labs(x = "Countries", title = "Types of Usage funding in each country in 2018") +
+  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
+```
+
+## 2019
+Funding received for all other budget line items was decreased.
+```{r echo=FALSE, fig.width = 8, fig.height = 10}
+ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer(palette = "Paired") +
+ labs(x = "Countries", title = "Types of Usage funding in each country in 2019") +
+  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
+```
+
+# Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
+```{r include=FALSE, fig.width = 8, fig.height = 10}
 TB_duration_2017 = TB_usage %>%
   filter(year == "2017") %>%
   mutate(hospd_2017 = hospd_mdr_dur) %>%
   select(country, hospd_2017)
-
-TB_duration_2018 = TB_usage %>%
-  filter(year == "2018") %>%
-  mutate(hospd_2018 = hospd_mdr_dur) %>%
-  select(country, hospd_2018)
 
 TB_duration_2019 = TB_usage %>%
   filter(year == "2019") %>%
   mutate(hospd_2019 = hospd_mdr_dur) %>%
   select(country, hospd_2019)
 
-TB_duration = full_join(inner_join(TB_duration_2017, TB_duration_2018), TB_duration_2019)
+TB_duration = inner_join(TB_duration_2017, TB_duration_2019)
 ```
+We can see that most of the country had the same or decreased estimated average duration of stay.
+```{r echo=FALSE, message=FALSE}
+TB_duration = inner_join(TB_duration_2017, TB_duration_2019)
+TB_duration_2017_2019 =  tidyr::gather(TB_duration, year, value, -country)
+TB_duration$country <- reorder(TB_duration$country, TB_duration$hospd_2019)
+TB_duration_2017_2019$country <- factor(TB_duration_2017_2019$country, levels = levels(TB_duration$country))
 
-```{r echo=FALSE}
-TB_duration = full_join(inner_join(TB_duration_2017, TB_duration_2018), TB_duration_2019)
-
-ggplot() +
-  geom_segment(data=TB_duration, aes(y = country, yend = country, x = 0, xend = .5), 
-               color = "#b2b2b2", size = 0.15) + 
-  geom_dumbbell(data = TB_duration, aes(y=country, x = hospd_2017, xend = hospd_2019),
-                size = 1.5, color = "#b2b2b2", size_x = 3, size_xend = 3, colour_x = "red",
-                colour_xend = "blue") +
+ggplot(TB_duration, aes(y = country)) + 
+  geom_point(data = TB_duration_2017_2019, aes(x = value, color = year), size = 2) +
+  geom_dumbbell(aes(x = hospd_2017, xend = hospd_2019), size=3, color="#e3e2e1", 
+                colour_x = "red", colour_xend = "blue",
+                dot_guide=TRUE, dot_guide_size=0.25) +
+  theme_bw() +
+  scale_color_manual(name = "", values = c("red", "blue") ) +
   labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
-       title = "Estimated average duration of stay if patients starting MDR-TB/XDR-TB
+       title = "Estimated average duration of stay if patients \n starting MDR-TB/XDR-TB
        treatment are hospitalized (days)") +
-  theme(axis.text.y = element_text(angle = 45, vjust = 0.5, hjust = 1))
+    theme(axis.text.y = element_text(angle = 45, vjust = 0.5, hjust = 1))
 
-
-ggplot(data = TB_usage, aes(x = country, y = hospd_mdr_dur, fill = year)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Estimated average duration of stay in hospitals(days)", y = "Country", 
-       title = "Estimated average duration of stay if patients starting MDR-TB/XDR-TB
-       treatment are hospitalized (days)") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1)) 
 ```
 
 # Transformation and Assumption of the Normality 
 
-Below is the density graph of proportion of the estimated mortality of TB per 100k.
+Below is the density graph of estimated average duration of stay.
 Since the graph is right-skewed, we need to make some changes to make this to satisfy the assumptions of the linear model.
-```{r regression anlaysis, include=FALSE, warning=FALSE }
-TB_burden = read.csv("./data/TB_burden_countries.csv")
-
-TB_burden = TB_burden %>%
-  mutate(
-    e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num),
-    e_mort_pro_100k = as.numeric(e_mort_num)/as.numeric(e_pop_num) * 100000
-  )
-
-TB_burden %>%
-  filter(year == 2017 |year == 2018 | year == 2019) %>%
-  filter(country == "Bangladesh" | country == "Cambodia" |country == "India"| country ==  "Indonesia" | country == "Lao People's Democratic Republic"|country ==  "Mongolia"| country == "Myanmar" | country == "Nepal"|country == "Solomon Islands"|country == "Thailand"|country == "Timor-Leste" ) 
-
-```
 
 ```{r GGPLOT, message=FALSE, warning=FALSE, echo=FALSE}
-TB_burden %>%
-  filter(year == 2017 |year == 2018 | year == 2019) %>%
-  filter(country == "Bangladesh" | country == "Cambodia" |country == "India"| country ==  "Indonesia" | country == "Lao People's Democratic Republic"|country ==  "Mongolia"| country == "Myanmar" | country == "Nepal"|country == "Solomon Islands"|country == "Thailand"|country == "Timor-Leste" ) %>%
-  ggplot(aes(x = e_mort_pro_100k)) + 
+TB_usage %>%
+  ggplot(aes(x=hospd_mdr_dur)) +
   geom_histogram(aes(y = ..density..), colour = "black", fill = "white") +
   geom_density(alpha = 0.3, fill = "red") +
-  labs(x = "Estimated mortality of TB cases per 100K", title = "Histogram of Estimated mortality of TB cases Per 100K")
+  labs(x = "Estimated average duration of stay(days)", title = "Histogram of Estimated Average Duration of Stay") 
 ```
 
 We used log transformation to make the graph normal. Below is the graph after the transformation, and we can say that it is more bell-shaped than the previous graph.
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-TB_burden %>%
-  filter(year == 2017 |year == 2018 | year == 2019) %>%
-  filter(country == "Bangladesh" | country == "Cambodia" |country == "India"| country ==  "Indonesia" | country == "Lao People's Democratic Republic"|country ==  "Mongolia"| country == "Myanmar" | country == "Nepal"|country == "Solomon Islands"|country == "Thailand"|country == "Timor-Leste" ) %>%
-  ggplot(aes(x = e_mort_pro_100k)) + 
+TB_usage %>%
+  ggplot(aes(x=hospd_mdr_dur)) +
   geom_histogram(aes(y = ..density..), colour = "black", fill = "white") +
   geom_density(alpha = 0.3, fill = "red") +
-  labs(x = "Estimated mortality of TB cases per 100K", title = "Histogram of Estimated mortality of TB cases Per 100K") +
-  scale_x_log10()
+  labs(x = "Estimated average duration of stay(days)", title = "Histogram of Estimated Average Duration of Stay") +
+    scale_x_log10()
+
 ```
 
 # Results
 With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. 
 We have included the interaction between **rcvd_patsup** and **rcvd_staff** because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.
 
-```{r include=FALSE}
-df1 = TB_burden %>% 
-  select(year, e_inc_num, e_pop_num, e_mort_pro_100k, e_mort_pro )
+```{r include=FALSE }
+lm_model1 = lm(hospd_mdr_dur ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + rcvd_oth + rcvd_patsup*rcvd_staff, data = TB_usage)
 
-df2 = TB_usage %>%
-  select(year, hospd_mdr_dur, rcvd_patsup,  rcvd_staff,  rcvd_mdrmgt, rcvd_fld, rcvd_oth, rcvd_patsup, rcvd_prog, rcvd_sld, rcvd_staff, rcvd_tbhiv )
-  
-TB_regression = merge(df1, df2, by=c("year")) %>%
-  na.omit()
-
-lm_model = lm(hospd_mdr_dur ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + rcvd_oth + rcvd_patsup*rcvd_staff, data = TB_regression)
+lm_model2 = lm(hospd_mdr_dur ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + rcvd_oth, data = TB_usage)
 ```
 
 Based on transformation above, the model we are going to fit is:
 $$log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other + \beta_7 patient*staff$$
 
-```{r}
-summary(lm_model)
+```{r echo=FALSE}
+summary(lm_model1)
 ```
 
 Based on the summary, we can see that some of our main effects and the interaction term are statistically significant. 
 
-The F-statistics is 2221.3144029. It’s obvious that the model is statistically significant under any reasonable critical value. It also has a R2
- value of 0.5108901, which indicated chosen variables together are able to explain 51.09%
- of observed variation.
+The F-statistics is 214 with 7 and 7054df. It’s obvious that the model is statistically significant under any reasonable critical value. It also has a R^2 of 0.1751, saying that 17.51% can be explained the indicated variables. 
+
+We are also going to test the ANOVA test for accuracy:
+All the variables are less than the significant value(0.05) and we can conclude that at larger model is superior.
+```{r echo=FALSE}
+anova(lm_model1, lm_model2)
+```
