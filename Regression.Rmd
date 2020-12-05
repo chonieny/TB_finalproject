@@ -110,7 +110,13 @@ Variables used are:
 
 There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.
 
+<<<<<<< HEAD
 
+=======
+# Regression Analysis
+
+## Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
+>>>>>>> 6d6b19938a0e39a0033721ac8def45d0755b0cdf
 ```{r include=FALSE, fig.width = 8, fig.height = 10}
 TB_duration_2017 = TB_usage %>%
   filter(year == "2017") %>%
