@@ -103,7 +103,6 @@ To be more accurate, we will make a new variable called **e_mort_pro_100k**, a p
 There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.
 
 
-# Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
 ```{r include=FALSE}
 TB_duration_2017 = TB_usage %>%
   filter(year == "2017") %>%

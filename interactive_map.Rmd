@@ -38,7 +38,7 @@ world <- map_data("world") %>%
   filter(region != "Antarctica")
 ```
 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE, warning = FALSE, echo = FALSE}
 interactive_map = TB_burden %>%
   right_join(world, by = c(country = "region")) %>%
   ggplot(aes(long, lat, group = group, fill= e_mort_num)) +

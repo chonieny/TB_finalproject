@@ -113,7 +113,6 @@ usage_2019_top5 = TB_usage %>%
 ```
 
 
-# Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
 ```{r include=FALSE}
 TB_duration_2017 = TB_usage %>%
   filter(year == "2017") %>%
