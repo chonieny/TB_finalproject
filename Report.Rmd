@@ -61,3 +61,9 @@ We also conducted the ANOVA test to see if the interaction variable is crucial o
 Therefore, we can use these regression to predict average hospital stay in 2020.
 
 # Findings & Discussion
+After the regression, the following regression is:
+$$log(average\ duration\ of\ stay\ for\ treatment) = $$
+$$- 130.8329 + 0.06694 year + 0.00000001176 patient  + 0.00000000155 staff $$
+$$+ 0.0000001160 programme -0.00000013128 drugs + -0.00000000898 other$$
+
+So when pluggin the average funding for each variables, we are  95% confident that the in 2020,  the average stay at the hospitals will fall between **-0.3268** and **5.75** days.

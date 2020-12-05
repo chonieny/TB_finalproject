@@ -226,6 +226,7 @@ all_lm_model2 = lm(log_hosp ~ year + patient + staff + programme + drugs + other
 Looking at the regression model for all countries,  all variables are significant but the interaction between **patient** and **staff** is not significant.
 Below is the ANOVA Test and we can conclude that since the pvalue is bigger than 0.05, the bigger model is not significant.
 ```{r}
+options("scipen"=100, "digits"=4)
 summary(all_lm_model2)
 anova(all_lm_model1,all_lm_model2)
 ```
