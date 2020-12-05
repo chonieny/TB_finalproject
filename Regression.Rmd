@@ -14,6 +14,7 @@ library(dplyr)
 library(ggplot2)
 library(reshape2)
 library(ggalt)   
+
 knitr::opts_chunk$set(
   fig.width = 6,
   fig.asp = .6,
@@ -99,42 +100,8 @@ Variables that we are going to use are:
 
 
 There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.
-
-# Type of Usage Funding in Each Country
-## 2017
-Most countries got funded for drugs to treat drug-susceptible TB (US Dollars)
-```{r echo=FALSE, fig.width = 12, fig.height = 12}
-ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
-  geom_bar(stat = "identity") +
-  scale_fill_brewer(palette = "Paired") +
- labs(x = "Countries", title = "Types of Usage funding in each country in 2017") +
-  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
-```
-
-## 2018
-The funding received for National TB Programme staff has increased than last year.
-```{r echo=FALSE, fig.width = 8, fig.height = 10}
-ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
-  geom_bar(stat = "identity") +
-  scale_fill_brewer(palette = "Paired") +
- labs(x = "Countries", title = "Types of Usage funding in each country in 2018") +
-  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
-```
-
-## 2019
-Funding received for all other budget line items was decreased.
-```{r echo=FALSE, fig.width = 8, fig.height = 10}
-ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +
-  geom_bar(stat = "identity") +
-  scale_fill_brewer(palette = "Paired") +
- labs(x = "Countries", title = "Types of Usage funding in each country in 2019") +
-  scale_y_continuous(name = "US Dollars($)", labels = scales::comma) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
-```
-
-# Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
+# Regression Analysis
+## Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
 ```{r include=FALSE, fig.width = 8, fig.height = 10}
 TB_duration_2017 = TB_usage %>%
   filter(year == "2017") %>%
@@ -198,24 +165,78 @@ With the regression analysis, we can predict the Estimated average duration of s
 We have included the interaction between **rcvd_patsup** and **rcvd_staff** because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.
 
 ```{r include=FALSE }
-lm_model1 = lm(hospd_mdr_dur ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + rcvd_oth + rcvd_patsup*rcvd_staff, data = TB_usage)
+TB_burden = read.csv("./data/TB_burden_countries.csv")
 
-lm_model2 = lm(hospd_mdr_dur ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + rcvd_oth, data = TB_usage)
+TB_burden = TB_burden %>%
+  mutate(
+    e_mort_pro = as.numeric(e_mort_num)/as.numeric(e_pop_num),
+    e_mort_pro_100k = as.numeric(e_mort_num)/as.numeric(e_pop_num) * 100000
+  )
+df1 = TB_burden %>% 
+  select(country, year, e_inc_num, e_pop_num, e_mort_pro_100k, e_mort_pro )
+
+df2 = TB_usage %>%
+  select(country, year, hospd_mdr_dur, rcvd_patsup,  rcvd_staff,  rcvd_mdrmgt, rcvd_fld, rcvd_oth, rcvd_patsup, rcvd_prog, rcvd_sld, rcvd_staff, rcvd_tbhiv )
+  
+TB_regression = merge(df1, df2, by=c("year")) %>%
+  na.omit() %>%
+  mutate(
+   log_hosp = log(hospd_mdr_dur) 
+  )
+
+TB_regression = TB_regression %>% 
+  filter_all(all_vars(!is.infinite(.)))
+
+TB_usage = TB_usage %>%
+  mutate(
+   log_hosp = log(hospd_mdr_dur) 
+  ) %>%
+  filter_all(all_vars(!is.infinite(.)))
+
+lm_model1 = lm(log_hosp ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + rcvd_oth + rcvd_patsup*rcvd_staff, data = TB_usage)
+
+lm_model2 = lm(log_hosp ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + rcvd_oth, data = TB_usage)
 ```
 
 Based on transformation above, the model we are going to fit is:
-$$log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other + \beta_7 patient*staff$$
+$$log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other$$
 
 ```{r echo=FALSE}
 summary(lm_model1)
 ```
 
-Based on the summary, we can see that some of our main effects and the interaction term are statistically significant. 
+Based on the summary, we can see that some of our main effects are not significant due to small data.
+## All Countries
+So, we are going to look at all the countries' data and find the multiple linear regression.
 
-The F-statistics is 214 with 7 and 7054df. It’s obvious that the model is statistically significant under any reasonable critical value. It also has a R^2 of 0.1751, saying that 17.51% can be explained the indicated variables. 
+```{r include=FALSE}
 
-We are also going to test the ANOVA test for accuracy:
-All the variables are less than the significant value(0.05) and we can conclude that at larger model is superior.
-```{r echo=FALSE}
-anova(lm_model1, lm_model2)
+all_lm_model1 = lm(log_hosp ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + rcvd_oth + rcvd_patsup*rcvd_staff, data = TB_regression)
+
+all_lm_model2 = lm(log_hosp ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + rcvd_fld + rcvd_oth, data = TB_regression)
 ```
+Looking at the regression model for all countries,  all variables are significant but the interaction between **rcvd_patsup** and **rcvd_staff** is not significant.
+Below is the ANOVA Test and we can conclude that since the pvalue is bigger than 0.05, the bigger model is not significant.
+```{r}
+summary(all_lm_model2)
+anova(all_lm_model1,all_lm_model2)
+```
+
+# Prediction
+Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days) in 2020:
+```{r include=FALSE}
+
+mean(TB_regression$rcvd_patsup)
+mean(TB_regression$rcvd_staff)
+mean(TB_regression$rcvd_mdrmgt)
+mean(TB_regression$rcvd_fld)
+mean(TB_regression$rcvd_oth)
+
+newdata = data.frame(year = 2020, rcvd_patsup = 5601390, rcvd_staff = 13714771, rcvd_mdrmgt = 3517401, rcvd_fld = 8813787, rcvd_oth = 7378395) 
+
+```
+
+```{recho=FALSE}
+predict(lm_model1, newdata, interval="predict")
+```
+After putting the average funding for each variables, we are  95% confident that the in 2020,  wthe average stay at the hospitals will fall between -0.3268 and 5.75 days
