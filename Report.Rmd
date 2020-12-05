@@ -33,10 +33,18 @@ Not only that, one of our initial areas of interest was examining around how man
 After doing so, we became more interested in performing some regression analysis to see if the average duration of stay in hospitals for these patients can be predicted by various types of TB fundings. This is a slight change from our initial intent of performing regression analysis on TB fundings with TB mortality rates, since this regression did not seem to be statistically significant and also seemed quite broad of a relationship. Thus, we decided to focus more on examining and predicting the relationship between average duration of hospital stay for MDR-TB and XDR-TB patients and various types of national TB fundings. 
 
 # Data
-The main dataset for our project is made by  World Health Organization. The dataset which consists types of usage funding has a range from 2017-2019.
 
-Variables that we are going to use are:
+The source of our three main datasets and data dictionary are from the World Health Organization. 
+They can be accessed [here](https://www.who.int/teams/global-tuberculosis-programme/data).
 
+Variables that we have used are:
+
+* **e_mort_num**: Estimated number of deaths from TB
+* **e_pop_num** : Estimated total population number
+* **mdr_succ** : Outcomes for MDR-TB cases: treatment success(cured or treatment completed)
+* **xdr_succ** : Outcomes for XDR-TB cases: treatment success(cured or treatment completed)
+* **country** : Country
+* **year** : Year of the data
 * **patient**: Funding received for patient support (US Dollars)
 * **staff**: Funding received for National TB Programme staff (central unit staff and subnational TB staff)  (US Dollars)
 * **programme**: Funding received for programme costs to treat drug-resistant TB (US Dollars)
@@ -44,23 +52,32 @@ Variables that we are going to use are:
 * **other**: Funding received for all other budget line items (US Dollars)
 * **hospd_mdr_dur**: Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
 
-There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.
-Our goal is to try find the multiple linear regression model using top 5 usage funding and predict future estimated average duration of stay. 
 
 # Exploratory & Additional Analysis
-After we plot the density graph, we noticed it was heavily right skewed. So, doing a log transformation made the density look more normal. So doing a log linear regression will help to predict the average hospital stay in 2020.
+### Mortality & Funding 
+Question: What are the estimated number of deaths from TB around the world from 2000~2019?
+          Are there any countries with high estimated number of deaths from TB? <br/>
+        : Are there any trends in estimated proportions of death from TB in various countries
+          in these years and also in the recent three years?<br/>
+        : What are the trends in total TB funding received in these countries in the recent
+          three years? Do these trends show any association with the trends in estimated
+          proportions of death from TB in these countries in the recent three years? 
 
-Based on transformation above, the model we are going to fit is:
+### Funding Usages
+Question: What are the top 5 areas that the national TB fundings received were allocated to in each country in each year from 2017~2019? Are there any trends per country and across the countries? Do these trends seem to change over the years? 
+
+### TB Hospitalization
+After we plotted the density graph, we noticed it was heavily right skewed. So, doing a log transformation made the density look more normal. Thus, doing a log linear regression helped to predict the average hospital stay in 2020.
+
+Based on the normal transformation, the model we fit was:
 $$log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other$$
 
-With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. 
-We have included the interaction between **patient** and **staff** because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.
+With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized, and We used the top 5 usages of funding and year. We have also included the interaction between **patient** and **staff** because there could be a possible relationship that the funding for patient support and different national TB programme staffs can affect durations of hospital stay.
 
-However, with the country that we selected, there is not enough data to conduct multiple linear regression.
-So, we are going to use all the countries for accuracy. After conducting the linear regression, we can see that F-statistic is 911.8 with the p-value of less than 0.05.
-We also conducted the ANOVA test to see if the interaction variable is crucial or not. And the result was that it was significant. 
-
-Therefore, we can use these regression to predict average hospital stay in 2020.
+However, with the countries that we selected, there was not enough significant data to conduct multiple linear regression.
+Thus, we haved used all the countries in the datasets for increased accuracy and significance. After conducting such linear regression including all countries, we could see that F-statistic is 911.8 with the p-value of less than 0.05.
+We also conducted the ANOVA test to see if the interaction variable is crucial or not, and the result showed that it is significant.
+Therefore, we can use this regression to predict the average length of hospital stay for MDR-TB and XDR-TB patients getting treatment in 2020.
 
 # Findings & Discussion
 After the regression, the following regression is:
@@ -68,4 +85,4 @@ $$log(average\ duration\ of\ stay\ for\ treatment) = $$
 $$- 130.8329 + 0.06694 year + 0.00000001176 patient  + 0.00000000155 staff $$
 $$+ 0.0000001160 programme - 0.00000013128 drugs - 0.00000000898 other$$
 
-So when pluggin the average funding for each variables, we are  95% confident that the in 2020,  the average stay at the hospitals will fall between **-0.3268** and **5.75** days.
+Thus, when plugging in the average funding for each variable, we are  95% confident that in 2020, the average stay at hospitals for MDR-TB and XDR-TB patients receiving treatments will fall between **-0.3268** and **5.75** days.

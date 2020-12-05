@@ -54,7 +54,7 @@ world <- map_data("world") %>%
   filter(region != "Antarctica")
 ```
 
-```{r message = FALSE, warning = FALSE, echo = FALSE}
+```{r message = FALSE, warning = FALSE, echo = FALSE, fig.width = 16, fig.height = 13}
 interactive_map = TB_burden %>%
   right_join(world, by = c(country = "region")) %>%
   ggplot(aes(long, lat, group = group, fill= e_mort_num)) +
@@ -89,7 +89,7 @@ animate(interactive_map,
 ```
 
 
-```{r echo = FALSE, message = FALSE, fig.width = 11, fig.height = 12}
+```{r echo = FALSE, message = FALSE, fig.width = 15, fig.height = 13}
 TB_burden = read.csv("./data/TB_burden_countries.csv")
 
 TB_mort =
@@ -112,7 +112,7 @@ p <- ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
 p + transition_reveal(year)
 ```
 
-```{r message = FALSE, echo = FALSE, fig.width = 12, fig.height = 12}
+```{r message = FALSE, echo = FALSE, fig.width = 15, fig.height = 13}
 TB_burden = read.csv("./data/TB_burden_countries.csv")
 
 TB_mort =
@@ -135,7 +135,7 @@ ggplot(data = TB_mort, aes(x = year, y = e_mort_pro, group = country)) +
   scale_y_continuous(name = "Proportion of deaths from TB")
 ```
 
-```{r message = FALSE, echo = FALSE, fig.width = 11, fig.height = 12}
+```{r message = FALSE, echo = FALSE, fig.width = 15, fig.height = 13}
 TB_funding = read.csv("./data/TB_expenditure_utilisation.csv")
 
 TB_tot_funding =

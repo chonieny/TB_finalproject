@@ -96,9 +96,9 @@ usage_2019_top5 = TB_usage %>%
 ```
 
 
-The main dataset for our project is made by  World Health Organization. It can be access at [here](https://www.who.int/teams/global-tuberculosis-programme/data). The dataset which consists types of usage funding has a range from 2017-2019, and other datset that consists estimated mortality of TB cases has a range of 2000 to 2019. To make the data consistent, we will use the data from 2017 to 2019.
+The dataset which consists of types of usage of funding has a range from 2017-2019, and another dataset that consists of estimated mortality of TB cases has a range from 2000 to 2019. To make the data consistent, we used the data from 2017 to 2019 for the regression analysis.
 
-Variables that we are going to use are:
+Variables used are:
 
 * **patient**: Funding received for patient support (US Dollars)
 * **staff**: Funding received for National TB Programme staff (central unit staff and subnational TB staff)  (US Dollars)
@@ -109,8 +109,8 @@ Variables that we are going to use are:
 
 
 There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.
-# Regression Analysis
-## Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)
+
+
 ```{r include=FALSE, fig.width = 8, fig.height = 10}
 TB_duration_2017 = TB_usage %>%
   filter(year == "2017") %>%
@@ -125,7 +125,7 @@ TB_duration_2019 = TB_usage %>%
 TB_duration = inner_join(TB_duration_2017, TB_duration_2019)
 ```
 
-# Transformation and Assumption of the Normality 
+## Transformation and Assumption of the Normality 
 
 Below is the density graph of estimated average duration of stay.
 Since the graph is right-skewed, we need to make some changes to make this to satisfy the assumptions of the linear model.
@@ -149,7 +149,7 @@ TB_usage %>%
 
 ```
 
-# Results
+## Results
 With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. 
 We have included the interaction between **patient** and **staff** because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.
 
@@ -211,7 +211,7 @@ summary(all_lm_model2)
 anova(all_lm_model1,all_lm_model2)
 ```
 
-# Prediction
+## Prediction
 Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days) in 2020:
 ```{r include=FALSE}
 TB_regression %>%

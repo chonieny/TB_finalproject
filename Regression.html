@@ -393,8 +393,8 @@ div.tocify {
 </div>
 
 
-<p>The main dataset for our project is made by World Health Organization. It can be access at <a href="https://www.who.int/teams/global-tuberculosis-programme/data">here</a>. The dataset which consists types of usage funding has a range from 2017-2019, and other datset that consists estimated mortality of TB cases has a range of 2000 to 2019. To make the data consistent, we will use the data from 2017 to 2019.</p>
-<p>Variables that we are going to use are:</p>
+<p>The dataset which consists of types of usage of funding has a range from 2017-2019, and another dataset that consists of estimated mortality of TB cases has a range from 2000 to 2019. To make the data consistent, we used the data from 2017 to 2019 for the regression analysis.</p>
+<p>Variables used are:</p>
 <ul>
 <li><strong>patient</strong>: Funding received for patient support (US Dollars)</li>
 <li><strong>staff</strong>: Funding received for National TB Programme staff (central unit staff and subnational TB staff) (US Dollars)</li>
@@ -403,15 +403,15 @@ div.tocify {
 <li><strong>other</strong>:Funding received for all other budget line items (US Dollars)</li>
 <li><strong>hospd_mdr_dur</strong>: Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</li>
 </ul>
-<p>There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them. # Regression Analysis ## Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</p>
-<div id="transformation-and-assumption-of-the-normality" class="section level1">
-<h1>Transformation and Assumption of the Normality</h1>
+<p>There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.</p>
+<div id="transformation-and-assumption-of-the-normality" class="section level2">
+<h2>Transformation and Assumption of the Normality</h2>
 <p>Below is the density graph of estimated average duration of stay. Since the graph is right-skewed, we need to make some changes to make this to satisfy the assumptions of the linear model.</p>
 <p><img src="Regression_files/figure-html/GGPLOT-1.png" width="90%" /></p>
 <p>We used log transformation to make the graph normal. Below is the graph after the transformation, and we can say that it is more bell-shaped than the previous graph. <img src="Regression_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
 </div>
-<div id="results" class="section level1">
-<h1>Results</h1>
+<div id="results" class="section level2">
+<h2>Results</h2>
 <p>With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. We have included the interaction between <strong>patient</strong> and <strong>staff</strong> because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.</p>
 <p>Based on transformation above, the model we are going to fit is: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other\]</span></p>
 <pre><code>## 
@@ -479,8 +479,8 @@ summary(all_lm_model2)</code></pre>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
-<div id="prediction" class="section level1">
-<h1>Prediction</h1>
+<div id="prediction" class="section level2">
+<h2>Prediction</h2>
 <p>Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days) in 2020:</p>
 <p>After putting the average funding for each variables, we are 95% confident that the in 2020, the average stay at the hospitals will fall between <strong>-0.3268</strong> and <strong>5.75</strong> days</p>
 </div>

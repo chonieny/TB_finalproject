@@ -31,7 +31,7 @@ scale_fill_discrete = scale_fill_viridis_d
 ```
 
 
-```{r message = FALSE, echo = FALSE, fig.width = 11, fig.height = 12}
+```{r message = FALSE, echo = FALSE, message = FALSE, fig.width = 15, fig.height = 13}
 TB_outcomes = read.csv("./data/TB_outcomes.csv")
 TB_usage = read.csv("./data/TB_expenditure_utilisation.csv")
 
@@ -127,7 +127,7 @@ TB_duration_2019 = TB_usage %>%
 TB_duration = inner_join(TB_duration_2017, TB_duration_2019)
 ```
 We can see that most of the country had the same or decreased estimated average duration of stay.
-```{r echo=FALSE, fig.width = 11, fig.height = 12}
+```{r echo=FALSE, fig.width = 13, fig.height = 13}
 TB_duration = inner_join(TB_duration_2017, TB_duration_2019)
 TB_duration_2017_2019 =  tidyr::gather(TB_duration, year, value, -country)
 TB_duration$country <- reorder(TB_duration$country, TB_duration$hospd_2019)
