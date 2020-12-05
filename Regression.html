@@ -393,61 +393,84 @@ div.tocify {
 </div>
 
 
+<style>
+<p>.nav-pills&gt;li:nth-child(2) { background: green; }</p>
 <p>The main dataset for our project is made by World Health Organization. It can be access at <a href="https://www.who.int/teams/global-tuberculosis-programme/data">here</a>. The dataset which consists types of usage funding has a range from 2017-2019, and other datset that consists estimated mortality of TB cases has a range of 2000 to 2019. To make the data consistent, we will use the data from 2017 to 2019.</p>
 <p>Variables that we are going to use are:</p>
 <ul>
-<li><p><strong>rcvd_patsup</strong>: Funding received for patient support (US Dollars)</p></li>
-<li><p><strong>rcvd_staff</strong>: Funding received for National TB Programme staff (central unit staff and subnational TB staff) (US Dollars)</p></li>
-<li><p><strong>rcvd_mdrmgt</strong>:Funding received for programme costs to treat drug-resistant TB (US Dollars)</p></li>
-<li><p><strong>rcvd_fld</strong>:Funding received for drugs to treat drug-susceptible TB (US Dollars)</p></li>
-<li><p><strong>rcvd_oth</strong>:Funding received for all other budget line items (US Dollars)</p></li>
-<li><p><strong>e_mort_num</strong>: Estimated number of deaths from TB (all forms)</p></li>
-<li><p><strong>e_pop_num</strong>: Estimated total population number</p></li>
+<li><strong>rcvd_patsup</strong>: Funding received for patient support (US Dollars)</li>
+<li><strong>rcvd_staff</strong>: Funding received for National TB Programme staff (central unit staff and subnational TB staff) (US Dollars)</li>
+<li><strong>rcvd_mdrmgt</strong>:Funding received for programme costs to treat drug-resistant TB (US Dollars)</li>
+<li><strong>rcvd_fld</strong>:Funding received for drugs to treat drug-susceptible TB (US Dollars)</li>
+<li><strong>rcvd_oth</strong>:Funding received for all other budget line items (US Dollars)</li>
+<li><strong>hospd_mdr_dur</strong>: Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</li>
 </ul>
-<p>To be more accurate, we will make a new variable called <strong>e_mort_pro_100k</strong>, a proportion of estimated proportion of death from TB by dividing the estimated number of deaths from TB(<strong>e_mort_num</strong>) by estimated total population number(<strong>e_pop_num</strong>) and multiply by 100,000.</p>
 <p>There are other types of usage funding, but we selected top 5 by taking the mean of each types and ordered them.</p>
-<pre><code>## Joining, by = &quot;country&quot;
-## Joining, by = &quot;country&quot;</code></pre>
-<p><img src="Regression_files/figure-html/unnamed-chunk-4-1.png" width="90%" /><img src="Regression_files/figure-html/unnamed-chunk-4-2.png" width="90%" /></p>
+<div id="type-of-usage-funding-in-each-country" class="section level1">
+<h1>Type of Usage Funding in Each Country</h1>
+<div id="section" class="section level2">
+<h2>2017</h2>
+<p>Most countries got funded for drugs to treat drug-susceptible TB (US Dollars) <img src="Regression_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
+</div>
+<div id="section-1" class="section level2">
+<h2>2018</h2>
+<p>The funding received for National TB Programme staff has increased than last year. <img src="Regression_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
+</div>
+<div id="section-2" class="section level2">
+<h2>2019</h2>
+<p>Funding received for all other budget line items was decreased. <img src="Regression_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+</div>
+</div>
+<div id="estimated-average-duration-of-stay-if-patients-starting-mdr-tbxdr-tb-treatment-are-hospitalized-days" class="section level1">
+<h1>Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized (days)</h1>
+<p>We can see that most of the country had the same or decreased estimated average duration of stay. <img src="Regression_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+</div>
 <div id="transformation-and-assumption-of-the-normality" class="section level1">
 <h1>Transformation and Assumption of the Normality</h1>
-<p>Below is the density graph of proportion of the estimated mortality of TB per 100k. Since the graph is right-skewed, we need to make some changes to make this to satisfy the assumptions of the linear model.</p>
+<p>Below is the density graph of estimated average duration of stay. Since the graph is right-skewed, we need to make some changes to make this to satisfy the assumptions of the linear model.</p>
 <p><img src="Regression_files/figure-html/GGPLOT-1.png" width="90%" /></p>
-<p>We used log transformation to make the graph normal. Below is the graph after the transformation, and we can say that it is more bell-shaped than the previous graph. <img src="Regression_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<p>We used log transformation to make the graph normal. Below is the graph after the transformation, and we can say that it is more bell-shaped than the previous graph. <img src="Regression_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
 <p>With the regression analysis, we can predict the Estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We will use the top 5 usage of funding and year. We have included the interaction between <strong>rcvd_patsup</strong> and <strong>rcvd_staff</strong> because there could be a possible relationship that the funding for patient support can have different duration of stay to different national TB Programme staff who received funding.</p>
 <p>Based on transformation above, the model we are going to fit is: <span class="math display">\[log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other + \beta_7 patient*staff\]</span></p>
-<pre class="r"><code>summary(lm_model)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = hospd_mdr_dur ~ year + rcvd_patsup + rcvd_staff + 
 ##     rcvd_mdrmgt + rcvd_fld + rcvd_oth + rcvd_patsup * rcvd_staff, 
-##     data = TB_regression)
+##     data = TB_usage)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
 ## -131.18  -68.66   -7.71   21.51  369.00 
 ## 
 ## Coefficients:
-##                          Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)             3.676e+04  3.139e+03  11.712  &lt; 2e-16 ***
-## year                   -1.816e+01  1.555e+00 -11.676  &lt; 2e-16 ***
-## rcvd_patsup            -1.544e-05  1.034e-06 -14.933  &lt; 2e-16 ***
-## rcvd_staff             -9.157e-07  2.543e-07  -3.600  0.00032 ***
-## rcvd_mdrmgt             5.270e-06  3.414e-07  15.439  &lt; 2e-16 ***
-## rcvd_fld               -4.101e-06  3.279e-07 -12.508  &lt; 2e-16 ***
-## rcvd_oth               -1.313e-06  1.890e-07  -6.947 4.06e-12 ***
-## rcvd_patsup:rcvd_staff  1.836e-13  1.160e-14  15.820  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+##                          Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)             3.676e+04  5.272e+04   0.697    0.492
+## year                   -1.816e+01  2.613e+01  -0.695    0.493
+## rcvd_patsup            -1.544e-05  1.737e-05  -0.889    0.382
+## rcvd_staff             -9.157e-07  4.272e-06  -0.214    0.832
+## rcvd_mdrmgt             5.270e-06  5.734e-06   0.919    0.367
+## rcvd_fld               -4.101e-06  5.507e-06  -0.745    0.463
+## rcvd_oth               -1.313e-06  3.176e-06  -0.414    0.683
+## rcvd_patsup:rcvd_staff  1.836e-13  1.949e-13   0.942    0.355
 ## 
-## Residual standard error: 99.85 on 7054 degrees of freedom
-## Multiple R-squared:  0.1751, Adjusted R-squared:  0.1743 
-## F-statistic:   214 on 7 and 7054 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 114.7 on 25 degrees of freedom
+## Multiple R-squared:  0.1751, Adjusted R-squared:  -0.05583 
+## F-statistic: 0.7583 on 7 and 25 DF,  p-value: 0.6266</code></pre>
 <p>Based on the summary, we can see that some of our main effects and the interaction term are statistically significant.</p>
-<p>The F-statistics is 2221.3144029. It’s obvious that the model is statistically significant under any reasonable critical value. It also has a R2 value of 0.5108901, which indicated chosen variables together are able to explain 51.09% of observed variation.</p>
+<p>The F-statistics is 214 with 7 and 7054df. It’s obvious that the model is statistically significant under any reasonable critical value. It also has a R^2 of 0.1751, saying that 17.51% can be explained the indicated variables.</p>
+<p>We are also going to test the ANOVA test for accuracy: All the variables are less than the significant value(0.05) and we can conclude that at larger model is superior.</p>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: hospd_mdr_dur ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + 
+##     rcvd_fld + rcvd_oth + rcvd_patsup * rcvd_staff
+## Model 2: hospd_mdr_dur ~ year + rcvd_patsup + rcvd_staff + rcvd_mdrmgt + 
+##     rcvd_fld + rcvd_oth
+##   Res.Df    RSS Df Sum of Sq     F Pr(&gt;F)
+## 1     25 328632                          
+## 2     26 340291 -1    -11659 0.887 0.3553</code></pre>
 </div>
 
 

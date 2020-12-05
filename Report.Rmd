@@ -7,3 +7,16 @@ output:
     theme: cerulean
 ---
 
+# Motivation
+
+content 
+* 1.7 billion people were infected by Tuberculosis bacteria in 2018, which is around 23% of the world's population 
+* TB still infects more than 10 million people each year and is the leading infectious disease killer
+* Approximately 20% of TB cases around the world are resistant to anti-TB drugs, which is problematic because treatments are limited, often toxic, and expensive
+* Out of the 10 million people who were sick with TB in 2018, around 3 million could not get proper care by their health systems 
+
+# Related work
+
+The following resources are some of the inspirations of this project. 
+
+* [CDC MDR TB](https://www.cdc.gov/tb/publications/factsheets/drtb/mdrtb.htm)
