@@ -94,7 +94,7 @@ ggplot(data = usage_2017_top5, aes(x = country, y = value, fill = usage_type)) +
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Types of Usage funding in each country in 2018
+### Types of Usage of funding in each country in 2018
 
 ```{r}
 ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
@@ -105,7 +105,7 @@ ggplot(data = usage_2018_top5, aes(x = country, y = value, fill = usage_type)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
 ```
 
-### Types of Usage funding in each country in 2019
+### Types of Usage of funding in each country in 2019
 
 ```{r}
 ggplot(data = usage_2019_top5, aes(x = country, y = value, fill = usage_type)) +

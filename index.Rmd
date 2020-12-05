@@ -8,13 +8,14 @@ output:
 ---
 
 ## Where image will be
-
+<img src = "images/TB.jpg" style = "width 75%">
 
 ## Project Motivation
 
 
 ## Data used
-
+The source of our main datasets are from the World Health Organization. 
+They can be accessed [here](https://www.who.int/teams/global-tuberculosis-programme/data).
 
 ## Website Overview
 
