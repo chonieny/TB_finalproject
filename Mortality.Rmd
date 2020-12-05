@@ -58,7 +58,7 @@ p <- ggplot(data = TB_success, aes(x = year, y = mdr_xdr_success, group = countr
 p + transition_reveal(year)
 ```
 
-```{r tidy data, include = FALSE}
+```{r tidy data, include = FALSE, echo = FALSE, message = FALSE}
 table(TB_usage$g_whoregion) #We will use WPR(Western Pacific) , SEA(South East Asia)
 TB_usage = TB_usage %>%
   select(
@@ -86,7 +86,7 @@ TB_usage = TB_usage[TB_usage$country %in% names(which(table(TB_usage$country) > 
 ```
 
 
-```{r Variable:Types of Usage funding in each country in 2017-2019, include=FALSE}
+```{r Variable:Types of Usage funding in each country in 2017-2019, include=FALSE, echo = FALSE, message = FALSE}
 unique(TB_usage$country)
 colSums(TB_usage == 0)
 
