@@ -18,13 +18,14 @@ The source of our main datasets are from the World Health Organization.
 They can be accessed [here](https://www.who.int/teams/global-tuberculosis-programme/data).
 
 ## Website Navigation
-* **Mortality & Funding**: Interactive world map of estimated number of deaths from TB(2000~2019), TB mortality rates and TB fundings in different Asian countries(2000~2019)
+* **Mortality & Funding**: Animated world map of estimated number of deaths from TB(2000~2019), TB mortality rates and TB fundings in different Asian countries(2000~2019)
 * **Funding Usages**: Graphs of top 5 funding usages in different Asian countries(2017~2019)
 * **TB Hospitalization**: Graphs of treatment data for MDR-TB and XDR-TB patients in different Asian countries(2000~2019)
 * **Regression Analysis**: Regression Analysis to predict the estimated average duration of hospital stay for MDR-TB and XDR-TB patients who are starting treatment 
 * **Report**: Project report 
 
 ## Video Introduction
+
 
 ## Prediction
 With regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized. We are 95% confident that the in 2020, the average duration of hospital stay for patients who started MDR-TB/XDR-TB treatment will fall between **-0.3268** and **5.75** days

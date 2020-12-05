@@ -9,7 +9,7 @@ output:
 
 # Motivation
 
-According to CDC, TB infects more than 10 million people each year and is the leading infectious disease killer. In 2018, 1.7 billion people were infected by Tuberculosis bacteria, which is around 23% of the world's population. In addition, TB is becoming a more serious infectious disease as 
+  According to CDC, TB infects more than 10 million people each year and is the leading infectious disease killer. In 2018, 1.7 billion people were infected by Tuberculosis bacteria, which is around 23% of the world's population. In addition, TB is becoming a more serious infectious disease as 
 approximately 20% of TB cases around the world are resistant to anti-TB drugs. This is problematic because treatments for such MDR-TB(multi-drug resistant TB) and XDR-TB(extensively drug resistant TB) cases are limited, often toxic, and expensive. Thus, we wanted to learn more about TB cases around the world and whether national fundings are related with TB mortality cases around the world. Moreover, given the threat of drug resistant TB cases, we wanted to look more into treatment statuses for MDR-TB and XDR-TB patients. 
 
 
@@ -28,9 +28,9 @@ The following resources are some of the inspirations of this project.
 
 # Questions throughout the project
 
-Our main questions were constant throughout the project, but some additional questions arose in the course of our data analyses. Initially, we intended to examine TB mortality rates across countries in all continents from 2000 to 2019, but due to lack of pertinent data, we focused on examining TB mortality rates in 11 specific countries in the Asia region. In these countries, we were curious if total national TB funding received in the last three years have had any association with the TB mortality rates in these last three years. Naturally, we also wanted to learn more about the usages of these fundings in each country. 
-Not only that, one of our initial areas of interest was examining around how many MDR-TB and XDR-TB patients complete successful treatment each year. So, we wanted to do so for the years from 2000 to 2019 for the countries that we have selected. After noticing that the number of such patients seem to have been slightly increasing in recent years, we were curious if the average duration of stay in hospitals for such patients show any trends in recent years. 
-After doing so, we became more interested in performing some regression analysis to see if the average duration of stay in hospitals for these patients can be predicted by various types of TB fundings. This is a slight change from our initial intent of performing regression analysis on TB fundings with TB mortality rates, since this regression did not seem to be statistically significant and also seemed quite broad of a relationship. Thus, we decided to focus more on examining and predicting the relationship between average duration of hospital stay for MDR-TB and XDR-TB patients and various types of national TB fundings. 
+  Our main questions were constant throughout the project, but some additional questions arose in the course of our data analyses. Initially, we intended to examine TB mortality rates across countries in all continents from 2000 to 2019, but due to lack of pertinent data, we focused on examining TB mortality rates in 11 specific countries in the Asia region. In these countries, we were curious if total national TB funding received in the last three years have had any association with the TB mortality rates in these last three years. Naturally, we also wanted to learn more about the usages of these fundings in each country. <br/>
+  Not only that, one of our initial areas of interest was examining around how many MDR-TB and XDR-TB patients complete successful treatment each year. So, we wanted to do so for the years from 2000 to 2019 for the countries that we have selected. After noticing that the number of such patients seem to have been slightly increasing in recent years, we were curious if the average duration of stay in hospitals for such patients show any trends in recent years. <br/>
+  After doing so, we became more interested in performing some regression analysis to see if the average duration of stay in hospitals for these patients can be predicted by various types of TB fundings. This is a slight change from our initial intent of performing regression analysis on TB fundings with TB mortality rates, since this regression did not seem to be statistically significant and also seemed quite broad of a relationship. Thus, we decided to focus more on examining and predicting the relationship between average duration of hospital stay for MDR-TB and XDR-TB patients and various types of national TB fundings. 
 
 # Data
 
@@ -58,7 +58,7 @@ Variables that we have used are:
 Question: What are the estimated number of deaths from TB around the world from 2000~2019?
           Are there any countries with high estimated number of deaths from TB? <br/>
         : Are there any trends in estimated proportions of death from TB in various countries
-          in these years and also in the recent three years?<br/>
+          from 2000 to 2019 and also in the recent three years?<br/>
         : What are the trends in total TB funding received in these countries in the recent
           three years? Do these trends show any association with the trends in estimated
           proportions of death from TB in these countries in the recent three years? 
@@ -67,15 +67,15 @@ Question: What are the estimated number of deaths from TB around the world from 
 Question: What are the top 5 areas that the national TB fundings received were allocated to in each country in each year from 2017~2019? Are there any trends per country and across the countries? Do these trends seem to change over the years? 
 
 ### TB Hospitalization
-Question: What were the number of MDR-TB and XDR-TB patients who completed treatment or were cured in the last 19 years? Are there any trends?
-:What were the estimated duration of stay if these patients starting treatment were hospitalized in 2017~2019? Are there any relationships between the number of these patients who completed treatment and the estimated duration of hospital stay for these patients receiving treatment? 
+Question: What were the number of MDR-TB and XDR-TB patients who completed treatment or were cured in the last 19 years? Are there any trends? <br/>
+: What were the estimated duration of stay if these patients starting treatment were hospitalized in 2017~2019? Are there any relationships between the number of these patients who completed treatment and the estimated duration of hospital stay for these patients receiving treatment? 
 
 ### Regression Analysis
-After we plotted the density graph, we noticed it was heavily right skewed. So, doing a log transformation made the density look more normal. Thus, doing a log linear regression helped to predict the average hospital stay in 2020.
+After we plotted the density graph of the estimated average duration of hospital stay for MDR-TB and XDR-TB patients, we noticed it was heavily right skewed. So, doing a log transformation made the density look more normal. 
 Based on the normal transformation, the model we fit was:
 $$log(average\ duration\ of\ stay\ for\ treatment) = \beta_0 + \beta_1 year + \beta_2 patient  + \beta_3 staff + \beta_4 programme + \beta_5 drugs + \beta_6 other$$
 
-With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized, and We used the top 5 usages of funding and year. We have also included the interaction between **patient** and **staff** because there could be a possible relationship that the funding for patient support and different national TB programme staffs can affect durations of hospital stay.
+With the regression analysis, we can predict the estimated average duration of stay if patients starting MDR-TB/XDR-TB treatment are hospitalized, and we used the top 5 usages of funding and year. We have also included the interaction between **patient** and **staff** because there could be a possible relationship that the funding for patient support and different national TB programme staffs can affect durations of hospital stay.
 
 However, with the countries that we selected, there was not enough significant data to conduct multiple linear regression.
 Thus, we haved used all the countries in the datasets for increased accuracy and significance. After conducting such linear regression including all countries, we could see that F-statistic is 911.8 with the p-value of less than 0.05.
@@ -83,11 +83,11 @@ We also conducted the ANOVA test to see if the interaction variable is crucial o
 Therefore, we can use this regression to predict the average length of hospital stay for MDR-TB and XDR-TB patients getting treatment in 2020.
 
 # Findings & Discussion
-From examining our exploratory analysis, we were able to find that the countries in our project have an overall decreasing trend in the estimated proportions of death from TB in 2000~2019. 
-India had the highest estimated number of deaths from TB throughout 2000 to 2019 and still remanis as so, but thankfully this number has been decreasing. <br/> From comparing the estimated number of death from TB in each country from 2017~2019 and the total funding received in these countries in these three years, we were not able to observe much distinguishing association. However, it was apparent that Timor-Leste, a country with the highest proportion of death from TB in 2017~2019, also was one of the countries with the lowest TB fundings received. In addition, Myanmar showed a decreasing trend in the estimated proportion of death from TB from 2017~2019 and showed a very slight increasing trend in the TB fundings received in these years. To more accurately assess these relationships, we can focus on these specific countries and run statistical analyses while including data from more years. <br/>
-Then, we looked into the top 5 areas that these TB fundings were used in each country, and noticed that funding received for National TB Programme staff was one of the highest areas that TB national fundings were allocated to in a lot of the countires. Across the countries analyzed, India had the highest amount of funding received from 2017~2019. 
-
-After conducting regression analyses, the regression model we found was:
+  From examining our exploratory analyses, we were able to find that the countries in our project have an overall decreasing trend in the estimated proportions of death from TB in 2000~2019. 
+India had the highest estimated number of deaths from TB in the world throughout 2000 to 2019 and still remanis as so, but thankfully this number has been decreasing. <br/>    From comparing the estimated number of death from TB in each country from 2017~2019 and the total funding received in these countries in these three years, we were not able to observe much noticeable association. However, it was apparent that Timor-Leste, a country with the highest proportion of death from TB in 2017~2019, was also one of the countries with the lowest TB fundings received. In addition, Myanmar showed a decreasing trend in the estimated proportion of death from TB from 2017~2019 and showed a very slight increasing trend in the TB fundings received in these years. To more accurately assess these relationships, we can potentially focus on these specific countries and run statistical analyses while including data from more years. <br/>
+  Then, we looked into the top 5 areas that these TB fundings were used in each country, and noticed that funding received for National TB Programme staff was one of the highest areas that TB national fundings were allocated to in a lot of the countires. Across the countries analyzed, India had the highest amount of funding received from 2017~2019. As India is one of the top leading countries of TB cases, we can guess that the country puts more funding efforts into treating and preventing TB. More specifically, the proportion of funding towards TB patient support seemed to have increased in India from 2017 to 2019. <br/>
+  Examining the animated graph that shows the number of MDR-TB and XDR-TB patients who completed treatments or were cured, we could find that there is a noticeable big increase in the number in Cambodia from 2000 to 2019. For the other Asian countries analyzed, there was not an significant increase over the years, but the trends generally seemed to gradually increase over the years. Furthermore, looking into the average duration of hospital stay in MDR and XDR-TB patients in 2017 and 2019, most countries had very similar average duration of hospital stay in these two years. However, the average duration of hospital stay for these patients in Timor-Leste was much higher in 2017 than in 2019. <br/>
+Lastly, from our regression analyses, the regression model we found was:
 $$log(average\ duration\ of\ stay\ for\ treatment) = $$
 $$- 130.8329 + 0.06694 year + 0.00000001176 patient  + 0.00000000155 staff $$
 $$+ 0.0000001160 programme - 0.00000013128 drugs - 0.00000000898 other$$
